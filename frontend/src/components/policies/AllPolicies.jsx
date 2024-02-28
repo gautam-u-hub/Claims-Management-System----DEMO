@@ -1,5 +1,5 @@
 import React from "react";
-import image from "../../Images/Random.jpg"
+import image from "../../Images/Random.jpg";
 
 const AllPolicies = () => {
   return (
@@ -10,7 +10,9 @@ const AllPolicies = () => {
         <div className="card mb-3">
           <div className="row">
             <div className="col-md-3">
-              <img src={image} alt="" className="img-fluid"  />
+              <div className="image-wrapper d-flex align-items-center">
+                <img src={image} alt="" className="img-fluid" />
+              </div>
             </div>
             <div className="col-md-8">
               <div className="card-body">
@@ -24,7 +26,9 @@ const AllPolicies = () => {
                 <p className="card-text">
                   <small className="text-muted">location</small>
                 </p>
-                <a href="" className="btn btn-primary">Show Policy</a>
+                <a href="/show-policy" className="btn btn-primary">
+                  Show Policy
+                </a>
               </div>
             </div>
           </div>

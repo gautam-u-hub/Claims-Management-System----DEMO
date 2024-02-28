@@ -5,7 +5,7 @@ function Navbar({ currentUser }) {
       <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
-            YelpCamp
+            Claims Management System
           </a>
           <button
             className="navbar-toggler"
@@ -23,11 +23,11 @@ function Navbar({ currentUser }) {
               <a className="nav-link" href="/">
                 Home
               </a>
-              <a className="nav-link" href="/campgrounds">
-                Campgrounds
+              <a className="nav-link" href="/all-policies">
+                Policies
               </a>
-              <a className="nav-link" href="/campgrounds/new">
-                New Campground
+              <a className="nav-link" href="/new-policy">
+                New Policy
               </a>
             </div>
             <div className="navbar-nav" style={{ marginLeft: "auto" }}>
