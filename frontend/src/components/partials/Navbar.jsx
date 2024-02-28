@@ -1,55 +1,32 @@
-import React from 'react';
+import React from "react";
+import { Navbar, Container, Nav } from "react-bootstrap";
 
-function Navbar({ currentUser }) {
-    return (
-      <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            Claims Management System
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
-              <a className="nav-link" href="/">
-                Home
-              </a>
-              <a className="nav-link" href="/all-policies">
-                Policies
-              </a>
-              <a className="nav-link" href="/new-policy">
-                New Policy
-              </a>
-            </div>
-            <div className="navbar-nav" style={{ marginLeft: "auto" }}>
-              {!currentUser ? (
-                <>
-                  <a className="nav-link" href="/login">
-                    Login
-                  </a>
-                  <a className="nav-link" href="/register">
-                    Register
-                  </a>
-                </>
-              ) : (
-                <a className="nav-link" href="/logout">
-                  Logout
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
-    );
+function CustomNavbar({ currentUser }) {
+  return (
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
+      <Container>
+        <Navbar.Brand href="/">Claims Management System</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/all-policies">Policies</Nav.Link>
+            <Nav.Link href="/new-policy">New Policy</Nav.Link>
+          </Nav>
+          <Nav>
+            {!currentUser ? (
+              <>
+                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link href="/register">Register</Nav.Link>
+              </>
+            ) : (
+              <Nav.Link href="/logout">Logout</Nav.Link>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }
 
-export default Navbar;
+export default CustomNavbar;
