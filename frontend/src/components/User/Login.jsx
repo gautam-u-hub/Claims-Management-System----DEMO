@@ -5,10 +5,17 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
-
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../store/userAction";
 
 const LoginForm = () => {
   const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user) || {};
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -18,6 +25,21 @@ const LoginForm = () => {
     }
 
     setValidated(true);
+
+    event.preventDefault();
+
+    if (form.checkValidity()) {
+      dispatch(loginUser({ email, password }));
+    }
+
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
   return (
@@ -30,10 +52,10 @@ const LoginForm = () => {
               alt=""
               className="card-img-top"
             />
-                  </Card>
-                  <br />
-          <h5 class="card-title">Login</h5>
-            <br />
+          </Card>
+          <br />
+          <h5 className="card-title">Login</h5>
+          <br />
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="validationCustomUsername">
@@ -43,6 +65,8 @@ const LoginForm = () => {
                     type="text"
                     placeholder="Username"
                     aria-describedby="inputGroupPrepend"
+                    value={email}
+                    onChange={handleEmailChange}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
@@ -59,6 +83,8 @@ const LoginForm = () => {
                     type="password"
                     placeholder="Password"
                     aria-describedby="inputGroupPrepend"
+                    value={password}
+                    onChange={handlePasswordChange}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
