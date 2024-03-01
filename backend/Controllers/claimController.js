@@ -7,11 +7,11 @@ const Claim = require("../models/claimModel.js");
 
 // Create a new claim
 exports.createClaim = catchAsyncErrors(async (req, res, next) => {
-    const { claimDate, claimAmount, description, documents } = req.body;
+    const { claimDate, claimAmount, description } = req.body;
     const policyId = req.params.id; 
     const userId = req.user.id;
 
-    if (!policyId || !userId || !claimDate || !claimAmount || !description || !documents) {
+    if (!policyId || !userId || !claimDate || !claimAmount || !description ) {
         return next(new ErrorHandler('Please provide all required fields', 400));
     }
 
@@ -22,7 +22,6 @@ exports.createClaim = catchAsyncErrors(async (req, res, next) => {
         claimDate,
         claimAmount,
         description,
-        documents
     });
 
     res.status(200).json({
@@ -72,7 +71,6 @@ exports.getUserClaimById = catchAsyncErrors( async (req,res,next)=> {
 // Get all claims of 
 exports.getAllClaims = catchAsyncErrors(async (req, res, next) => {
     const claims = await Claim.find({});
-
     res.status(200).json({
         success: true,
         claims

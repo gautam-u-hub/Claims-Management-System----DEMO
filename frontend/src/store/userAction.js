@@ -1,31 +1,55 @@
 import { userAction } from "./user-slice";
 import axios from "axios";
 
-const randomUser = {
-    "email": "tpa1@gmail.com",
-    "password": "password"
 
-}
-const email = "tpa1@gmail.com";
-const password = "password";
 
-export const loginUser = () => {
+
+export const loginUser = ({ email, password }) => {
     return async (dispatch) => {
         try {
+            const config = {
+                headers: { "content-Type": "application/json" },
+            };
 
-            let link = `http://localhost:4000/auth/login`;
-
-            const config = { headers: { "content-Type": "application/json" } };
-
-
-            const { data } = await axios.post(link, { email, password }, config);
-            console.log(data);
+            const { data } = await axios.post(`http://localhost:4000/auth/login`, { email, password }, config);
+            // const { data } = {};
             dispatch(userAction.loginUser({
-                user: data.user || {}
+                user: data.user
             }));
-        }
-        catch (error) {
+
+
+        } catch (error) {
             console.log(error);
         }
+    }
+}
+
+
+
+
+export const logoutUser = () => {
+    return async (dispatch) => {
+        const logout = async () => {
+            let link = `http://localhost:4000/auth/logout`;
+
+            const res = await axios.get(link);
+
+            
+            return res;
+        }
+
+        try {
+            await logout();
+
+            dispatch(userAction.logoutUser({
+                message: "success"
+            }))
+
+
+        }
+        catch (e) {
+            console.log(e);
+        }
+
     }
 }

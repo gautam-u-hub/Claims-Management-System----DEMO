@@ -4,6 +4,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors.js");
 const sendToken = require("../utils/jwtToken.js");
 const sendEmail = require("../utils/sendEmail.js")
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 
 // Register a User
@@ -47,15 +48,13 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Invalid email or password", 401));
     }
 
+
     sendToken(user, 200, res);
 
 })
 
 
-exports.kuchbhi = (req, res) => {
 
-    res.send("hello");
-}
 
 
 exports.logout = catchAsyncErrors(async (req, res, next) => {

@@ -1,18 +1,27 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 
 const ShowPolicy = () => {
-    const policy = {
-      policyType: "General Insurance",
-      startDate: "2024-03-01",
-      endDate: "2025-03-01",
-      premiumAmount: 5000,
-      sumAssured: 1000000,
-      termsAndConditions:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel...",
-      policyTerm: "1 year",
-      paymentFrequency: "Monthly",
-    };
+  const { policyId } = useParams();
+  const policy = useSelector((state) => {
+    // Assuming policies are stored in state.policy.policies
+    const policies = state.policy.policies.policies;
+    // Loop through policies array to find the policy with the matching policyId
+    for (let i = 0; i < policies.length; i++) {
+      // console.log(policies[i]._id, policyId);
+      if (policies[i]._id === policyId) {
+        return policies[i];
+      }
+    }
+
+    // If policy with matching ID is not found, return null or handle accordingly
+    return null;
+  });
+
+  if (!policy) {
+    return <div>No policy exists with this id on your account </div>;
+  }
   return (
     <div className="container">
       <h1 className="text-center mb-4">Policy Details</h1>
@@ -66,7 +75,7 @@ const ShowPolicy = () => {
             </p>
           </div>
           <div className="text-center mt-4">
-            <Link to="/apply-claim" className="btn btn-primary">
+            <Link to={`/apply-claim/${policy._id}`}className="btn btn-primary">
               Apply for Claim
             </Link>
           </div>

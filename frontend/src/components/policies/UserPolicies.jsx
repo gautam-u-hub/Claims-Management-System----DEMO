@@ -1,17 +1,15 @@
 import React, { useEffect } from "react";
 import image from "../../Images/Random.jpg";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllPolicies } from "../../store/policyActions";
+import { getAllUserPolicies } from "../../store/policyActions";
 import { Link } from "react-router-dom";
 
 const AllPolicies = () => {
   const dispatch = useDispatch();
-  const policies = useSelector((state) => state.policy.policies.policies)||[];
+  const policies = useSelector((state) => state.policy.policies.policies) || [];
   useEffect(() => {
-    dispatch(getAllPolicies());
+    dispatch(getAllUserPolicies());
   }, [dispatch]);
-
-
 
   return (
     <>
@@ -36,7 +34,7 @@ const AllPolicies = () => {
                     </small>
                   </p>
                   <Link
-                    to={`/show-policy/${policy.policyId}`}
+                    to={`/show-policy/${policy._id}`}
                     className="btn btn-primary"
                   >
                     Show Policy

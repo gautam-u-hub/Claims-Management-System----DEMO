@@ -17,8 +17,26 @@ exports.createPolicy = catchAsyncErrors(async (req, res, next) => {
 
 // Get all policies
 
+exports.getAllUserPolicies = catchAsyncErrors(async (req, res, next) => {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    // Extract policy IDs from the user's policies
+    const policyIds = user.policies.map(policyObj => policyObj._id);
+    // Find all policies using the extracted policy IDs
+    const policies = await Policy.find({ _id: { $in: policyIds } });
+
+
+    res.status(200).json({
+        success: true,
+        policies
+    });
+});
+
 exports.getAllPolicies = catchAsyncErrors(async (req, res, next) => {
-    const policies = await Policy.find({});
+
+    // Find all policies using the extracted policy IDs
+    const policies = await Policy.find({ });
+
 
     res.status(200).json({
         success: true,

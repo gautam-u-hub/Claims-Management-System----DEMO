@@ -7,8 +7,12 @@ import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/userAction";
+import { useNavigate } from "react-router-dom";
+
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
   const [validated, setValidated] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,22 +21,29 @@ const LoginForm = () => {
 
   const user = useSelector((state) => state.user) || {};
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+ const handleSubmit = (event) => {
+   const form = event.currentTarget;
+   if (form.checkValidity() === false) {
+     event.preventDefault();
+     event.stopPropagation();
+   }
 
-    setValidated(true);
+   setValidated(true);
 
-    event.preventDefault();
+   event.preventDefault();
 
-    if (form.checkValidity()) {
-      dispatch(loginUser({ email, password }));
-    }
+   if (form.checkValidity()) {
+     dispatch(loginUser({ email, password }))
+       .then(() => {
+         navigate('/'); // Redirect to the home page
+       })
+       .catch((error) => {
+         // Handle login error
+         console.error("Login failed:", error);
+       });
+   }
+ };
 
-  };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);

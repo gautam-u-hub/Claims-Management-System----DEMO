@@ -30,17 +30,8 @@ const claimSchema = new mongoose.Schema({
         enum: ['Pending', 'Approved', 'Rejected'],
         default: 'Pending'
     },
-    documents: [{
-        public_id: {
-            type: String,
-            required: true,
-        },
-        url: {
-            type: String,
-            required: true,
-        }
-    }
-    ]
+
+    
 
 }, { timestamps: true });
 

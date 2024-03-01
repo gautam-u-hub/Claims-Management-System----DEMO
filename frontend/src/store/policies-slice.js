@@ -8,7 +8,11 @@ const policySlice = createSlice({
     reducers: {
         getAllPolicies(state, action) {
             state.policies=action.payload
+        },
+        getAllUserPolicies(state, action) {
+            state.policies=action.payload
         }
+
     }
 });
 
