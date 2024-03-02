@@ -34,7 +34,7 @@ export const logoutUser = () => {
 
             const res = await axios.get(link);
 
-            
+
             return res;
         }
 
@@ -43,6 +43,7 @@ export const logoutUser = () => {
 
             dispatch(userAction.logoutUser({
                 message: "success"
+
             }))
 
 
@@ -51,5 +52,25 @@ export const logoutUser = () => {
             console.log(e);
         }
 
+    }
+}
+
+
+export const registerUser = ({ email, name, password }) => {
+    return async (dispatch) => {
+        try {
+            const config = {
+                headers: { "content-Type": "application/json" },
+            };
+
+
+            const { data } = await axios.post(`http://localhost:4000/auth/register`, { name,email, password }, config);
+            dispatch(userAction.registerUser({
+                user: data.user
+            }));
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
 }

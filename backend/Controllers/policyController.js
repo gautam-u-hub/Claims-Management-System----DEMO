@@ -93,10 +93,10 @@ exports.deletePolicyById = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
-    const { userEmail } = req.body;
+    const { email } = req.body;
     const policyId = req.params.id;
 
-    let user = await User.findOne({ email: userEmail });
+    let user = await User.findOne({ email });
     const policy = await Policy.findById(policyId);
 
     if (!user) {

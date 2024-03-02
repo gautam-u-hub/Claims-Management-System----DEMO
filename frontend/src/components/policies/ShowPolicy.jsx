@@ -1,9 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+
 
 const ShowPolicy = () => {
+  const user = useSelector((state) => state.user.user.user);
   const { policyId } = useParams();
+  const [email, setEmail] = useState("");
+  const handleSubmit =  async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        headers: { "content-Type": "application/json" },
+      };
+    
+    
+
+      const { data } = await axios.post(
+        `http://localhost:4000/assign-policy/${policyId}`,
+        { email },
+        config
+      );
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const policy = useSelector((state) => {
     // Assuming policies are stored in state.policy.policies
     const policies = state.policy.policies.policies;
@@ -22,6 +46,13 @@ const ShowPolicy = () => {
   if (!policy) {
     return <div>No policy exists with this id on your account </div>;
   }
+
+ const handleEmailChange=(e)=>{
+    setEmail(e.target.value);
+  }
+
+
+  
   return (
     <div className="container">
       <h1 className="text-center mb-4">Policy Details</h1>
@@ -74,11 +105,38 @@ const ShowPolicy = () => {
               {policy.paymentFrequency}
             </p>
           </div>
-          <div className="text-center mt-4">
-            <Link to={`/apply-claim/${policy._id}`}className="btn btn-primary">
-              Apply for Claim
-            </Link>
-          </div>
+
+          {user.role !== "admin" && (
+            <div className="text-center mt-4">
+              <Link
+                to={`/apply-claim/${policy._id}`}
+                className="btn btn-primary"
+              >
+                Apply for Claim
+              </Link>
+            </div>
+          )}
+          <br />
+          {user.role === "admin" && (
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="inputEmail" className="form-label">
+                  Applicant's Email
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="inputEmail"
+                  value={email}
+                  required
+                  onChange={handleEmailChange}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Assign Policy
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

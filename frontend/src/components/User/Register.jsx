@@ -5,10 +5,19 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../store/userAction";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
-  const [validated, setValidated] = useState(false);
+  const navigate = useNavigate();
 
+  const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user) || {};
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -17,6 +26,26 @@ const LoginForm = () => {
     }
 
     setValidated(true);
+    event.preventDefault();
+    try {
+      dispatch(registerUser({ email, name, password })).then(() => {
+        navigate('/')
+      });
+    } catch (e) {
+      console.error("Registration failed: ", e);
+    }
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
   };
 
   return (
@@ -29,10 +58,10 @@ const LoginForm = () => {
               alt=""
               className="card-img-top"
             />
-                  </Card>
-                  <br />
-                  <h5 class="card-title">Register</h5>
-                  <br />
+          </Card>
+          <br />
+          <h5 class="card-title">Register</h5>
+          <br />
 
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
@@ -44,6 +73,8 @@ const LoginForm = () => {
                     placeholder="Email"
                     aria-describedby="inputGroupPrepend"
                     required
+                    value={email}
+                    onChange={handleEmailChange}
                   />
                   <Form.Control.Feedback type="invalid">
                     Please enter your email.
@@ -53,16 +84,18 @@ const LoginForm = () => {
             </Row>
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="validationCustomUsername">
-                <Form.Label>Username</Form.Label>
+                <Form.Label>Name</Form.Label>
                 <InputGroup hasValidation>
                   <Form.Control
                     type="text"
                     placeholder="Username"
                     aria-describedby="inputGroupPrepend"
                     required
+                    value={name}
+                    onChange={handleNameChange}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter your email.
+                    Please enter your Name.
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
@@ -77,6 +110,8 @@ const LoginForm = () => {
                     placeholder="Password"
                     aria-describedby="inputGroupPrepend"
                     required
+                    value={password}
+                    onChange={handlePasswordChange}
                   />
                   <Form.Control.Feedback type="invalid">
                     Please enter a password.

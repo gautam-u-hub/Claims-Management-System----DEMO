@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const AssignPolicy = () => {
   const policy = {
@@ -12,6 +12,10 @@ const AssignPolicy = () => {
     policyTerm: "1 year",
     paymentFrequency: "Monthly",
   };
+
+  useEffect(() => {
+    
+  }, []);
   return (
     <div className="container">
       <h1 className="text-center mb-4">Policy Details</h1>

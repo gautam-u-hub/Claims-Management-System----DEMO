@@ -36,7 +36,7 @@ const AllPolicies = () => {
                     </small>
                   </p>
                   <Link
-                    to={`/show-policy/${policy.policyId}`}
+                    to={`/show-policy/${policy._id}`}
                     className="btn btn-primary"
                   >
                     Show Policy

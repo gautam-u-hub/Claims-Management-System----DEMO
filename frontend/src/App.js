@@ -15,6 +15,9 @@ import axios from 'axios';
 import UserPolicies from "./components/policies/UserPolicies.jsx"
 import { useEffect } from 'react';
 import AllClaims from './components/Claims/AllClaims.jsx';
+import UserClaims from './components/Claims/UserClaims.jsx';
+import ClaimDetails from './components/Claims/ClaimDetails.jsx';
+
 axios.defaults.withCredentials = true;
 function App() {
 
@@ -35,7 +38,9 @@ function App() {
         <Route path='assign-policy' element={<AssignPolicy />} />
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
-        <Route path='/all-claims' element={<AllClaims/>}/>
+        <Route path='/all-claims' element={<AllClaims />} />
+        <Route path='/your-claims' element={<UserClaims />} />
+        <Route path='/user-claims/:claimId' element={<ClaimDetails/>} />
 
       </Routes>
     </Router>

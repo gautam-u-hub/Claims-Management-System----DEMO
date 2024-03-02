@@ -1,16 +1,20 @@
 import React, { useEffect } from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import {  logoutUser } from "../../store/userAction";
+import { logoutUser } from "../../store/userAction";
+import { useNavigate } from "react-router-dom";
+
 
 function CustomNavbar() {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.user);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logoutUser());
-
-    window.location.reload();
+    
+    navigate("/");
+    
   };
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
@@ -24,7 +28,10 @@ function CustomNavbar() {
             )}
             <Nav.Link href="/">Home</Nav.Link>
             {currentUser.user && currentUser.user.role === "policyHolder" && (
-              <Nav.Link href="/your-policies">Your Policies</Nav.Link>
+              <>
+                <Nav.Link href="/your-policies">Your Policies</Nav.Link>
+                <Nav.Link href="/your-claims">Your Claims</Nav.Link>
+              </>
             )}
             {currentUser.user && currentUser.user.role !== "policyHolder" && (
               <>
@@ -32,8 +39,11 @@ function CustomNavbar() {
                 <Nav.Link href="/all-claims">All Claims</Nav.Link>
               </>
             )}
+
             {currentUser.user && currentUser.user.role === "admin" && (
-              <Nav.Link href="/new-policy">New Policy (Admin)</Nav.Link>
+              <>
+                <Nav.Link href="/new-policy">New Policy </Nav.Link>
+              </>
             )}
           </Nav>
           <Nav>
