@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import image from "../../Images/Random.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Alert } from "react-bootstrap";
 
 const AllClaims = () => {
   const [claims, setClaims] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     const fetchClaims = async () => {
@@ -12,7 +14,8 @@ const AllClaims = () => {
         const response = await axios.get("http://localhost:4000/TPA/claims");
         setClaims(response.data.claims);
       } catch (error) {
-        console.error("Error fetching claims:", error);
+        setErrorMessage("Error fetching claims");
+        console.error("Error fetching claims:", error.data.response);
       }
     };
 
@@ -32,10 +35,17 @@ const AllClaims = () => {
     }
   };
 
+  const handleChangeStatus = async (claimId) => {
+    // Change claim status logic remains the same
+  };
+
   return (
     <>
       <div className="container">
         <h1>All Claims</h1>
+
+        {/* Display error message */}
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
         {claims.map((claim, index) => (
           <div className="card mb-3" key={index}>

@@ -1,19 +1,45 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {createClaim} from "../../store/claimActions"
+import { useDispatch } from "react-redux";
+import { createClaim } from "../../store/claimActions";
+import axios from "axios";
+import { Alert } from "react-bootstrap";
 
 const ApplyClaim = () => {
   const { policyId } = useParams();
   const [claimAmount, setClaimAmount] = useState("");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const claimDate = new Date();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Here you can handle form submission, for example, sending data to the server
 
-    dispatch(createClaim({policyId, claimDate , claimAmount, description}));
+  useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        setError(null);
+      }, 10000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [error]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const config = {
+        headers: { "Content-Type": "application/json" },
+      };
+
+      const { data } = await axios.post(
+        `http://localhost:4000/claims/${policyId}`,
+        { claimDate, claimAmount, description },
+        config
+      );
+
+      // Handle successful claim creation here, if needed
+    } catch (error) {
+      setError(error.response.data.message);
+    }
 
     setClaimAmount("");
     setDescription("");
@@ -23,6 +49,7 @@ const ApplyClaim = () => {
     <div className="row">
       <h1 className="text-center">Application for claim </h1>
       <div className="col-md-6 offset-md-3">
+        {error && <Alert variant="danger">{error}</Alert>}
         <form
           onSubmit={handleSubmit}
           noValidate

@@ -2,12 +2,14 @@ import React, { useState,useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { Navigate, useParams } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 
 
-const NewPolicy = () => {
-    const [errorMessage, setErrorMessage] = useState(null); // State to manage error
-    const [successMessage, setSuccessMessage] = useState(null);
+const UpdatePolicy = () => {
+    const { policyId } = useParams(); 
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
   const [formData, setFormData] = useState({
     policyType: "",
     startDate: "",
@@ -16,7 +18,7 @@ const NewPolicy = () => {
     paymentFrequency: "",
     premiumAmount: "",
     termsAndConditions: "",
-    sumAssured:"",
+    sumAssured: "",
   });
 
   const handleChange = (e) => {
@@ -37,44 +39,58 @@ const NewPolicy = () => {
       ...formData,
       endDate: date,
     });
-  };
+    };
+    
+    useEffect(() => {
+       const fetchPolicy = async () => {
+         try {
+           const response = await axios.get(
+             `http://localhost:4000/policy/${policyId}`
+             );
+            console.log(response.data.policy);
+           setFormData(response.data.policy);
+         } catch (error) {
+           setErrorMessage("Error fetching claims");
+           console.error("Error fetching claims:", error.data.response);
+         }
+       };
 
+       fetchPolicy();
+   },[])
 
   const handleSubmit = async (event) => {
-   event.preventDefault();
+    event.preventDefault();
     try {
       const config = {
         headers: { "content-Type": "application/json" },
       };
-    
-    
 
-      const { data } = await axios.post(`http://localhost:4000/policy`, formData, config);
-      console.log(data);
-     setSuccessMessage("Policy Created Successfully");
+      const { data } = await axios.put(
+        `http://localhost:4000/policy/${policyId}`,
+        formData,
+        config
+      );
+        console.log(data);
+        setSuccessMessage("Policy Updated Successfully");
 
     } catch (e) {
-      console.log(e);
-            setErrorMessage("Error creating the policy");
-
+        setErrorMessage("Policy is not updated try again");
     }
-
-
-  };
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSuccessMessage(null);
-      setErrorMessage(null);
-    }, 15000);
-    return () => clearTimeout(timer);
-  }, [successMessage, errorMessage]);
+    };
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+        setErrorMessage(null);
+      }, 15000);
+      return () => clearTimeout(timer);
+    }, [successMessage, errorMessage]);
 
   return (
     <div className="row">
       <h1 className="text-center">New Policy</h1>
       <div className="col-md-6 offset-md-3">
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
-        {errorMessage && <Alert variant="success">{errorMessage}</Alert>}
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
         <form noValidate className="validated-form" onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -216,7 +232,7 @@ const NewPolicy = () => {
 
           <div className="mb-3">
             <button type="submit" className="btn btn-success">
-              Add Policy
+              Update Policy
             </button>
           </div>
         </form>
@@ -225,4 +241,4 @@ const NewPolicy = () => {
   );
 };
 
-export default NewPolicy;
+export default UpdatePolicy;

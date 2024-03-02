@@ -8,17 +8,36 @@ const Claim = require("../models/claimModel.js");
 // Create a new claim
 exports.createClaim = catchAsyncErrors(async (req, res, next) => {
     const { claimDate, claimAmount, description } = req.body;
-    const policyId = req.params.id; 
+    const policyId = req.params.id;
     const userId = req.user.id;
 
-    if (!policyId || !userId || !claimDate || !claimAmount || !description ) {
+    if (!policyId || !userId || !claimDate || !claimAmount || !description) {
         return next(new ErrorHandler('Please provide all required fields', 400));
+    }
+
+    const user = await User.findById(userId);
+
+    let foundPolicy = null;
+    for (const policy of user.policies) {
+        if (policy._id.toString() === policyId.toString()) {
+            console.log("hhdscbdjkfvnzdfm")
+            foundPolicy = policy;
+            break;
+        }
+    }
+
+    if (!foundPolicy) {
+        return next(new ErrorHandler('Policy not found', 404));
+    }
+    
+    if (foundPolicy.leftAmount < claimAmount) {
+        return next(new ErrorHandler("Claim can't be created because the claim amount is higher than the sum assured left", 400));
     }
 
     const claim = await Claim.create({
         userId,
         policyId,
-        claimantName: req.user.name, 
+        claimantName: req.user.name,
         claimDate,
         claimAmount,
         description,
@@ -29,6 +48,7 @@ exports.createClaim = catchAsyncErrors(async (req, res, next) => {
         claim
     });
 });
+
 
 // Get all claims of user by its id
 exports.getLoggedInUserClaims = catchAsyncErrors(async (req, res, next) => {

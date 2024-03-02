@@ -2,61 +2,80 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { Alert } from "react-bootstrap";
 
 
 const ShowPolicy = () => {
-  const user = useSelector((state) => state.user.user.user);
-  const { policyId } = useParams();
-  const [email, setEmail] = useState("");
-  const handleSubmit =  async (e) => {
-    e.preventDefault();
-    try {
-      const config = {
-        headers: { "content-Type": "application/json" },
-      };
-    
-    
-
-      const { data } = await axios.post(
-        `http://localhost:4000/assign-policy/${policyId}`,
-        { email },
-        config
-      );
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  const policy = useSelector((state) => {
-    // Assuming policies are stored in state.policy.policies
-    const policies = state.policy.policies.policies;
-    // Loop through policies array to find the policy with the matching policyId
-    for (let i = 0; i < policies.length; i++) {
-      // console.log(policies[i]._id, policyId);
-      if (policies[i]._id === policyId) {
-        return policies[i];
-      }
-    }
-
-    // If policy with matching ID is not found, return null or handle accordingly
-    return null;
-  });
-
-  if (!policy) {
-    return <div>No policy exists with this id on your account </div>;
-  }
-
- const handleEmailChange=(e)=>{
-    setEmail(e.target.value);
-  }
-
-
   
+const user = useSelector((state) => state.user.user.user);
+const { policyId } = useParams();
+const [email, setEmail] = useState("");
+const [successMessage, setSuccessMessage] = useState(null);
+const [errorMessage, setErrorMessage] = useState(null);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const config = {
+      headers: { "content-Type": "application/json" },
+    };
+
+    const { data } = await axios.post(
+      `http://localhost:4000/assign-policy/${policyId}`,
+      { email },
+      config
+    );
+
+    setSuccessMessage("Policy assigned successfully");
+    setErrorMessage(null);
+  } catch (error) {
+    setErrorMessage(error.response.data.message);
+    setSuccessMessage(null);
+  }
+  };
+  
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+        setErrorMessage(null);
+      }, 15000);
+      return () => clearTimeout(timer);
+    }, [successMessage, errorMessage]);
+
+const policy = useSelector((state) => {
+  // Assuming policies are stored in state.policy.policies
+  const policies = state.policy.policies.policies;
+  // Loop through policies array to find the policy with the matching policyId
+  for (let i = 0; i < policies.length; i++) {
+    // console.log(policies[i]._id, policyId);
+    if (policies[i]._id === policyId) {
+      return policies[i];
+    }
+  }
+
+  // If policy with matching ID is not found, return null or handle accordingly
+  return null;
+});
+
+if (!policy) {
+  return <div>No policy exists with this id on your account </div>;
+}
+
+const handleEmailChange = (e) => {
+  setEmail(e.target.value);
+  };
+  
+
+
+
   return (
     <div className="container">
       <h1 className="text-center mb-4">Policy Details</h1>
       <div className="card">
+        {/* Display success message */}
+        {successMessage && <Alert variant="success">{successMessage}</Alert>}
+        {/* Display error message */}
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
         <div className="card-body">
           <div className="mb-3">
             <h5 className="card-title">Policy Type</h5>
@@ -116,6 +135,7 @@ const ShowPolicy = () => {
               </Link>
             </div>
           )}
+
           <br />
           {user.role === "admin" && (
             <form onSubmit={handleSubmit}>
@@ -132,10 +152,21 @@ const ShowPolicy = () => {
                   onChange={handleEmailChange}
                 />
               </div>
+
               <button type="submit" className="btn btn-primary">
                 Assign Policy
               </button>
             </form>
+          )}
+          {user.role === "admin" && (
+            <div className="text-center mt-4">
+              <Link
+                to={`/update-policy/${policy._id}`}
+                className="btn btn-primary"
+              >
+                Update Policy
+              </Link>
+            </div>
           )}
         </div>
       </div>

@@ -17,6 +17,10 @@ import { useEffect } from 'react';
 import AllClaims from './components/Claims/AllClaims.jsx';
 import UserClaims from './components/Claims/UserClaims.jsx';
 import ClaimDetails from './components/Claims/ClaimDetails.jsx';
+import MyComponent from './components/MyComponent.jsx';
+import UpdatePolicy from './components/policies/UpdatePolicy.jsx';
+import Home from './components/partials/Home.jsx';
+import Footer from './components/partials/Footer.jsx';
 
 axios.defaults.withCredentials = true;
 function App() {
@@ -27,7 +31,6 @@ function App() {
       <Navbar />
       <Routes>
        
-        <Route path='/' />
         <Route path='/all-policies' element={<AllPolicies />} />
         <Route path='/your-policies' element={<UserPolicies/>} />
 
@@ -40,9 +43,13 @@ function App() {
         <Route path='register' element={<Register />} />
         <Route path='/all-claims' element={<AllClaims />} />
         <Route path='/your-claims' element={<UserClaims />} />
-        <Route path='/user-claims/:claimId' element={<ClaimDetails/>} />
+        <Route path='/user-claims/:claimId' element={<ClaimDetails />} />
+        <Route path='alert' element={<MyComponent />} />
+        <Route path='update-policy/:policyId' element={<UpdatePolicy />} />
+        <Route path='/' element={<Home/>} />
 
       </Routes>
+      <Footer/>
     </Router>
   );
 }
