@@ -3,6 +3,13 @@ const app = express();
 const errorMiddleware = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const cors = require("cors"); // Importing CORS
+const swaggerUI = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerJsDocs = YAML.load('./Backend/api.yaml');
+
+
+
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -12,6 +19,8 @@ app.use(cors({
     credentials: true
 }));
 
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 
 // Route Imports
 const userRoutes = require("./routes/userRoutes");
