@@ -1,9 +1,9 @@
-// Footer.js
 import React from "react";
+import "./Footer.css"; // Import your CSS file
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-white text-center p-3 position-fixed bottom-0 w-100">
+    <footer className="footer">
       <div className="container">
         <p>&copy; 2024 Claim Management System</p>
       </div>

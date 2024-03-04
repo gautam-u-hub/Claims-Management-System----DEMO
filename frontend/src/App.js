@@ -21,35 +21,54 @@ import MyComponent from './components/MyComponent.jsx';
 import UpdatePolicy from './components/policies/UpdatePolicy.jsx';
 import Home from './components/partials/Home.jsx';
 import Footer from './components/partials/Footer.jsx';
+import { useSelector } from 'react-redux';
+import AuthRoute from './AuthRoute.jsx';
+import AdminRoute from './AdminRoute.jsx'
 
 axios.defaults.withCredentials = true;
 function App() {
-
+  const user = useSelector((state) => state.user.user);
 
   return (
     <Router>
       <Navbar />
       <Routes>
-       
-        <Route path='/all-policies' element={<AllPolicies />} />
-        <Route path='/your-policies' element={<UserPolicies/>} />
 
-        <Route path='new-policy' element={<NewPolicy />} />
-        <Route path='apply-claim/:policyId' element={<ApplyClaim />} />
-        <Route path='show-policy/:policyId' element={<ShowPolicy/>}/>
-        <Route path='change-claim/:claimId' element={<ChangeClaimStatus />} />
-        <Route path='assign-policy' element={<AssignPolicy />} />
+
+        <Route element={<AuthRoute />}
+        >
+          <Route path='your-policies' element={<UserPolicies />} />
+          <Route path='apply-claim/:policyId' element={<ApplyClaim />} />
+          <Route path='show-policy/:policyId' element={<ShowPolicy />} />
+          <Route path='/your-claims' element={<UserClaims />} />
+          <Route path='/user-claims/:claimId' element={<ClaimDetails />} />
+
+
+
+        </Route>
+
+        <Route element={
+          <AdminRoute />
+        }
+        >
+          <Route path='/all-claims' element={<AllClaims />} />
+
+          <Route path='new-policy' element={<NewPolicy />} />
+          <Route path='all-policies' element={<AllPolicies />} />
+          <Route path='change-claim/:claimId' element={<ChangeClaimStatus />} />
+          <Route path='assign-policy' element={<AssignPolicy />} />
+          <Route path='update-policy/:policyId' element={<UpdatePolicy />} />
+
+
+
+        </Route>
+
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
-        <Route path='/all-claims' element={<AllClaims />} />
-        <Route path='/your-claims' element={<UserClaims />} />
-        <Route path='/user-claims/:claimId' element={<ClaimDetails />} />
-        <Route path='alert' element={<MyComponent />} />
-        <Route path='update-policy/:policyId' element={<UpdatePolicy />} />
-        <Route path='/' element={<Home/>} />
+        <Route path='/' element={<Home />} />
 
       </Routes>
-      <Footer/>
+      <Footer />
     </Router>
   );
 }

@@ -6,7 +6,8 @@ const cors = require("cors"); // Importing CORS
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerJsDocs = YAML.load('./Backend/api.yaml');
-
+const { startMetricsServer, restResponseTimeHistogram } = require("./utils/metrics");
+const responseTime = require("response-time");
 
 
 
@@ -18,6 +19,24 @@ app.use(cors({
     origin: 'http://localhost:3000', // Replace with the URL of your React app
     credentials: true
 }));
+
+app.use(
+    responseTime((req, res, time) => {
+        // Checking if the request has a route path
+        if (req?.route?.path) {
+
+            // Observing the response time and recording it in the histogram
+            restResponseTimeHistogram.observe(
+                {
+                    method: req.method,          // HTTP method
+                    route: req.route.path,       // Route path
+                    status_code: res.statusCode // Response status code
+                },
+                time * 1000  // Converting time to milliseconds
+            );
+        }
+    })
+);
 
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));

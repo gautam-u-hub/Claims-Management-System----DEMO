@@ -12,9 +12,9 @@ const userSlice = createSlice({
             state.user = {};
         },
         registerUser(state, action) {
-            state.user=action.payload
+            state.user = action.payload
         }
-       
+
     }
 });
 

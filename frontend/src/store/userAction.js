@@ -14,7 +14,8 @@ export const loginUser = ({ email, password }) => {
             const { data } = await axios.post(`http://localhost:4000/auth/login`, { email, password }, config);
             // const { data } = {};
             dispatch(userAction.loginUser({
-                user: data.user
+                user: data.user,
+                isAuthenticated:true
             }));
 
 
