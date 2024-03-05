@@ -23,6 +23,122 @@ tags:
     description: Policy Routes
   - name: claim
     description: Claim Routes
+definitions:
+  PolicyInput:
+    type: object
+    properties:
+      policyType:
+        type: string
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+      premiumAmount:
+        type: number
+      sumAssured:
+        type: number
+      termsAndConditions:
+        type: string
+      policyTerm:
+        type: string
+      paymentFrequency:
+        type: string
+      lastPaymentDate:
+        type: string
+        format: date
+    required:
+      - policyType
+      - startDate
+      - endDate
+      - premiumAmount
+      - sumAssured
+      - policyTerm
+      - paymentFrequency
+  ClaimInput:
+    type: object
+    properties:
+      policyId:
+        type: string
+      userId:
+        type: string
+      claimDate:
+        type: string
+        format: date
+      claimAmount:
+        type: number
+      description:
+        type: string
+      status:
+        type: string
+        enum:
+          - Pending
+          - Approved
+          - Rejected
+          - Reimbursed
+    required:
+      - policyId
+      - userId
+      - claimDate
+      - claimAmount
+      - description
+      - status
+  Policy:
+    type: object
+    properties:
+      _id:
+        type: string
+      policyType:
+        type: string
+      startDate:
+        type: string
+        format: date
+      endDate:
+        type: string
+        format: date
+      premiumAmount:
+        type: number
+      sumAssured:
+        type: number
+      termsAndConditions:
+        type: string
+      policyTerm:
+        type: string
+      paymentFrequency:
+        type: string
+      lastPaymentDate:
+        type: string
+        format: date
+  Claim:
+    type: object
+    properties:
+      _id:
+        type: string
+      policyId:
+        type: string
+      userId:
+        type: string
+      claimDate:
+        type: string
+        format: date
+      claimAmount:
+        type: number
+      description:
+        type: string
+      status:
+        type: string
+        enum:
+          - Pending
+          - Approved
+          - Rejected
+          - Reimbursed
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
 paths:
   /auth/register:
     post:

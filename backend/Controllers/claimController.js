@@ -74,6 +74,7 @@ exports.getUserClaim = catchAsyncErrors(async (req, res, next) => {
 exports.getUserClaimById = catchAsyncErrors( async (req,res,next)=> {
     const claimId = req.params.id;
     const claim = await Claim.findById(claimId);
+    console.log(policy);
 
     if (!claim) {
         return next(new ErrorHandler('Claim not found', 404));
@@ -99,6 +100,8 @@ exports.getAllClaims = catchAsyncErrors(async (req, res, next) => {
 // Get a single claim by ID 
 exports.getClaimById = catchAsyncErrors(async (req, res, next) => {
     const claim = await Claim.findById(req.params.id);
+    const policy = await Policy.findById(claim.policyId);
+
 
     if (!claim) {
         return next(new ErrorHandler('Claim not found', 404));
@@ -106,7 +109,8 @@ exports.getClaimById = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        claim
+        claim,
+        lastPaymentDate:policy.lastPaymentDate
     });
 });
 

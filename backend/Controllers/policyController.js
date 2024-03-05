@@ -62,6 +62,7 @@ exports.getPolicyById = catchAsyncErrors(async (req, res, next) => {
 // Update a policy by ID -- Admin
 
 exports.updatePolicyById = catchAsyncErrors(async (req, res, next) => {
+    console.log(req.body);
     const policy = await Policy.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true 

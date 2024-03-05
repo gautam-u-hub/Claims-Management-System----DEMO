@@ -32,6 +32,9 @@ const policySchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter payment frequency"],
     },
+    lastPaymentDate: {
+        type:Date
+    }
 
 });
 

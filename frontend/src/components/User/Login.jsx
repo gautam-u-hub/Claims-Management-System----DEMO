@@ -19,30 +19,33 @@ const LoginForm = () => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user) || {};
+  const
+{user,error} = useSelector((state) => state.user.user) || {};
 
- const handleSubmit = (event) => {
-   const form = event.currentTarget;
-   if (form.checkValidity() === false) {
-     event.preventDefault();
-     event.stopPropagation();
-   }
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
 
-   setValidated(true);
+  if (form.checkValidity() === false) {
+    event.stopPropagation();
+    return;
+  }
 
-   event.preventDefault();
+  setValidated(true);
 
-   if (form.checkValidity()) {
-     dispatch(loginUser({ email, password }))
-       .then(() => {
-         navigate('/'); // Redirect to the home page
-       })
-       .catch((error) => {
-         // Handle login error
-         console.error("Login failed:", error);
-       });
-   }
- };
+  if (form.checkValidity()) {
+    try {
+      await dispatch(loginUser({ email, password }));
+      
+       
+      navigate("/"); // Redirect to the home page
+    } catch (e) {
+      // Handle login error
+      console.error("Login failed:", error);
+    }
+  }
+};
+
 
 
   const handleEmailChange = (event) => {
@@ -58,10 +61,10 @@ const LoginForm = () => {
       <div className="row">
         <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
           <Card className="shadow">
-            <Card.Img
-              src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+            <img
+              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt=""
-              className="card-img-top"
+              class="card-img-top"
             />
           </Card>
           <br />

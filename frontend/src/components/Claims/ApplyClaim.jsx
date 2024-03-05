@@ -10,6 +10,8 @@ const ApplyClaim = () => {
   const [claimAmount, setClaimAmount] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
   const dispatch = useDispatch();
   const claimDate = new Date();
 
@@ -37,6 +39,7 @@ const ApplyClaim = () => {
       );
 
       // Handle successful claim creation here, if needed
+      setSuccess("Claim Created Successfully");
     } catch (error) {
       setError(error.response.data.message);
     }
@@ -50,6 +53,8 @@ const ApplyClaim = () => {
       <h1 className="text-center">Application for claim </h1>
       <div className="col-md-6 offset-md-3">
         {error && <Alert variant="danger">{error}</Alert>}
+        {success && <Alert variant="success">{success}</Alert>}
+
         <form
           onSubmit={handleSubmit}
           noValidate

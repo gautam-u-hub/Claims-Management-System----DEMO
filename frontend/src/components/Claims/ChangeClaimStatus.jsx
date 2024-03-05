@@ -6,12 +6,16 @@ import { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Alert } from "react-bootstrap";
-
+import { useSelector } from "react-redux";
 
 
 const ChangeClaimStatus = () => {
   const [errorMessage, setErrorMessage] = useState(null); // State to manage error
   const [successMessage, setSuccessMessage] = useState(null);
+    const [lastPaymentDate, setLastPaymentDate] = useState(null);
+
+  const user = useSelector((state) => state.user.user.user);
+
 
   const { claimId } = useParams();
 
@@ -22,6 +26,8 @@ const ChangeClaimStatus = () => {
           `http://localhost:4000/TPA/claims/${claimId}`
         );
         setClaim(response.data.claim);
+        console.log(response.data);
+        setLastPaymentDate(response.data.lastPaymentDate);
         // Process the response here
       } catch (error) {
         console.error("Error changing claim status:", error);
@@ -96,9 +102,24 @@ const ChangeClaimStatus = () => {
               className="form-control readonly-input" // Apply the readonly-input class
               type="text"
               id="location"
-              name="campground[location]"
+              name="claimDate"
               required
               value={claim.claimDate}
+              readOnly
+            />
+            <div className="valid-feedback">Looks good!</div>
+          </div>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="location">
+              Last Premium Payment Pay Date:
+            </label>
+            <input
+              className="form-control readonly-input" // Apply the readonly-input class
+              type="text"
+              id="location"
+              name="lastPaymentDate"
+              required
+              value={lastPaymentDate}
               readOnly
             />
             <div className="valid-feedback">Looks good!</div>
@@ -156,8 +177,11 @@ const ChangeClaimStatus = () => {
               required
             >
               <option value="">Select status</option>
-              <option value="Approved">Approved</option>
-              <option value="Rejected">Rejected</option>
+              <option value="Approved">Approve</option>
+              <option value="Rejected">Reject</option>
+              {user.role === "admin" && (
+                <option value="Reimbursed">Reimburse</option>
+              )}
             </select>
           </div>
 

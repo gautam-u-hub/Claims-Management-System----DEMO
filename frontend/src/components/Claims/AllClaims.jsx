@@ -31,7 +31,7 @@ const AllClaims = () => {
       case "Pending":
         return "orange";
       default:
-        return "bg-secondary";
+        return "green";
     }
   };
 

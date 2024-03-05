@@ -20,7 +20,7 @@ export const loginUser = ({ email, password }) => {
 
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 }

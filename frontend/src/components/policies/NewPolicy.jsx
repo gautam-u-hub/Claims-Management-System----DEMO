@@ -74,7 +74,7 @@ const NewPolicy = () => {
       <h1 className="text-center">New Policy</h1>
       <div className="col-md-6 offset-md-3">
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
-        {errorMessage && <Alert variant="success">{errorMessage}</Alert>}
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
         <form noValidate className="validated-form" onSubmit={handleSubmit}>
           <div className="mb-3">

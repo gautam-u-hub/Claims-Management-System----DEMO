@@ -27,6 +27,8 @@ const server = app.listen(process.env.PORT, () => {
     console.log(`Server is running on http://localhost:${process.env.PORT}`);
 });
 
+module.exports = server;
+
 // Handling Unhandled Promise Rejection
 process.on("unhandledRejection", err => {
     console.error(`Error: ${err.message}`);
@@ -35,3 +37,5 @@ process.on("unhandledRejection", err => {
         process.exit(1);
     });
 });
+
+

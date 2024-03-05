@@ -13,11 +13,9 @@ import Login from './components/User/Login.jsx';
 import Register from './components/User/Register.jsx';
 import axios from 'axios';
 import UserPolicies from "./components/policies/UserPolicies.jsx"
-import { useEffect } from 'react';
 import AllClaims from './components/Claims/AllClaims.jsx';
 import UserClaims from './components/Claims/UserClaims.jsx';
 import ClaimDetails from './components/Claims/ClaimDetails.jsx';
-import MyComponent from './components/MyComponent.jsx';
 import UpdatePolicy from './components/policies/UpdatePolicy.jsx';
 import Home from './components/partials/Home.jsx';
 import Footer from './components/partials/Footer.jsx';

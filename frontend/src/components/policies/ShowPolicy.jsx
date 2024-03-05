@@ -125,7 +125,7 @@ const handleEmailChange = (e) => {
             </p>
           </div>
 
-          {user.role !== "admin" && (
+          {user.role === "policyHolder" && (
             <div className="text-center mt-4">
               <Link
                 to={`/apply-claim/${policy._id}`}

@@ -19,6 +19,7 @@ const UpdatePolicy = () => {
     premiumAmount: "",
     termsAndConditions: "",
     sumAssured: "",
+    lastPaymentDate:"",
   });
 
   const handleChange = (e) => {
@@ -39,7 +40,13 @@ const UpdatePolicy = () => {
       ...formData,
       endDate: date,
     });
-    };
+  };
+  const handlelastPaymentDateChange = (date) => {
+    setFormData({
+      ...formData,
+      lastPaymentDate: date,
+    });
+  };
     
     useEffect(() => {
        const fetchPolicy = async () => {
@@ -133,6 +140,20 @@ const UpdatePolicy = () => {
               onChange={handleEndDateChange}
               className="form-control"
               name="endDate"
+              dateFormat="MM/dd/yyyy"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="startDate">
+              Last Date of Premium Payment:
+            </label>
+            <br />
+            <DatePicker
+              selected={formData.lastPaymentDate}
+              onChange={handlelastPaymentDateChange}
+              className="form-control"
+              name="lastPaymentDate"
               dateFormat="MM/dd/yyyy"
               required
             />
