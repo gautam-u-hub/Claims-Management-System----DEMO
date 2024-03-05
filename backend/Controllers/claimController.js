@@ -74,7 +74,6 @@ exports.getUserClaim = catchAsyncErrors(async (req, res, next) => {
 exports.getUserClaimById = catchAsyncErrors( async (req,res,next)=> {
     const claimId = req.params.id;
     const claim = await Claim.findById(claimId);
-    console.log(policy);
 
     if (!claim) {
         return next(new ErrorHandler('Claim not found', 404));

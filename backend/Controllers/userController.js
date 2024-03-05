@@ -30,7 +30,6 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     const { email, password } = req.body;
 
-    // checking if Policy Holder has given password and email both
 
     if (!email || !password) {
         return next(new ErrorHandler("Please Enter Email & Password", 400));
@@ -91,7 +90,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
         await sendEmail({
             email: user.email,
-            subject: `Policy Holder's Password Recovery`,
+            subject: `User's Password Recovery`,
             message,
         });
 
@@ -234,6 +233,14 @@ exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
         user
     });
 });
+
+exports.getAllUsers = catchAsyncErrors(async (req,res,next) => {
+    const users = await User.find({});
+    res.send({
+        success: true,
+        users
+    })
+})
 
 
 
