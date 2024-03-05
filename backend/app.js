@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors"); // Importing CORS
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
-const swaggerJsDocs = YAML.load('./Backend/api.yaml');
+const swaggerJsDocs = YAML.load('./backend/api.yaml');
 const { startMetricsServer, restResponseTimeHistogram } = require("./utils/metrics");
 const responseTime = require("response-time");
 
@@ -16,23 +16,21 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with the URL of your React app
+    origin: 'http://localhost:3000', 
     credentials: true
 }));
 
 app.use(
     responseTime((req, res, time) => {
-        // Checking if the request has a route path
         if (req?.route?.path) {
 
-            // Observing the response time and recording it in the histogram
             restResponseTimeHistogram.observe(
                 {
-                    method: req.method,          // HTTP method
-                    route: req.route.path,       // Route path
-                    status_code: res.statusCode // Response status code
+                    method: req.method,          
+                    route: req.route.path,      
+                    status_code: res.statusCode 
                 },
-                time * 1000  // Converting time to milliseconds
+                time * 1000  
             );
         }
     })
