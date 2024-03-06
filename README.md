@@ -40,5 +40,13 @@ npm i
 ```bash
 npm run dev
 ```
+4. Navigate to the frontend directory
+cd frontend
+
+5. Install dependencies
+npm install
+
+6. Start the development server
+npm start
 
 
