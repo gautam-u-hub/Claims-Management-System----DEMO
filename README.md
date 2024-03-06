@@ -75,12 +75,17 @@ npm i
 npm run dev
 ```
 4. Navigate to the frontend directory
+```bash
 cd frontend
+```
 
-5. Install dependencies
+6. Install dependencies
+```bash
 npm install
+```
 
-6. Start the development server
+8. Start the development server
+```bash
 npm start
-
+```
 
