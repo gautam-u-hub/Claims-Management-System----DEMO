@@ -1,6 +1,7 @@
 import { errorActions } from "./error-slice";
 import { userAction } from "./user-slice";
 import axios from "axios";
+import { API_URL } from "../Links";
 
 export const loginUser = ({ email, password }) => {
     return async (dispatch) => {
@@ -9,7 +10,7 @@ export const loginUser = ({ email, password }) => {
                 headers: { "content-type": "application/json" },
             };
 
-            const { data } = await axios.post(`http://localhost:4000/auth/login`, { email, password }, config);
+            const { data } = await axios.post(`${API_URL}/auth/login`, { email, password }, config);
             dispatch(userAction.loginUser({
                 user: data.user,
                 isAuthenticated: true
@@ -26,7 +27,7 @@ export const loginUser = ({ email, password }) => {
 export const logoutUser = () => {
     return async (dispatch) => {
         try {
-            await axios.get(`http://localhost:4000/auth/logout`);
+            await axios.get(`${API_URL}/auth/logout`);
             dispatch(userAction.logoutUser({
                 message: "success"
             }));
@@ -45,7 +46,7 @@ export const registerUser = ({ email, name, password }) => {
                 headers: { "content-type": "application/json" },
             };
 
-            const { data } = await axios.post(`http://localhost:4000/auth/register`, { name, email, password }, config);
+            const { data } = await axios.post(`${API_URL}/auth/register`, { name, email, password }, config);
             dispatch(userAction.registerUser({
                 user: data.user
             }));

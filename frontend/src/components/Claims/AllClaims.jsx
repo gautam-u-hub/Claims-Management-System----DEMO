@@ -3,7 +3,7 @@ import image from "../../Images/Random.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
-
+import { API_URL } from "../../Links";
 const AllClaims = () => {
   const [claims, setClaims] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -11,7 +11,7 @@ const AllClaims = () => {
   useEffect(() => {
     const fetchClaims = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/TPA/claims");
+        const response = await axios.get(`${API_URL}/TPA/claims`);
         setClaims(response.data.claims);
       } catch (error) {
         setErrorMessage("Error fetching claims");
@@ -35,10 +35,7 @@ const AllClaims = () => {
     }
   };
 
-  const handleChangeStatus = async (claimId) => {
-    // Change claim status logic remains the same
-  };
-
+  
   return (
     <>
       <div className="container">

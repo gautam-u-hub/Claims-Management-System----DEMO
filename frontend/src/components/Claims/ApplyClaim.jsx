@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { createClaim } from "../../store/claimActions";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
+import { API_URL } from "../../Links";
 
 const ApplyClaim = () => {
   const { policyId } = useParams();
@@ -12,7 +11,6 @@ const ApplyClaim = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  const dispatch = useDispatch();
   const claimDate = new Date();
 
   useEffect(() => {
@@ -38,10 +36,11 @@ const ApplyClaim = () => {
       };
 
       const { data } = await axios.post(
-        `http://localhost:4000/claims/${policyId}`,
+        `${API_URL}/claims/${policyId}`,
         { claimDate, claimAmount, description },
         config
       );
+      console.log(data);
 
       // Handle successful claim creation here, if needed
       setSuccess("Claim Created Successfully");

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import image from "../../Images/Random.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../Links";
 
 const AllClaims = () => {
   const [claims, setClaims] = useState([]);
@@ -9,7 +10,7 @@ const AllClaims = () => {
   useEffect(() => {
     const fetchClaims = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/claims");
+        const response = await axios.get(`${API_URL}/claims`);
         setClaims(response.data.claims);
       } catch (error) {
         console.error("Error fetching claims:", error);

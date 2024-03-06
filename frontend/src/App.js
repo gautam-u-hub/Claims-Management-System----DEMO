@@ -24,8 +24,8 @@ import AuthRoute from './AuthRoute.jsx';
 import AdminRoute from './AdminRoute.jsx'
 
 axios.defaults.withCredentials = true;
+
 function App() {
-  const user = useSelector((state) => state.user.user);
 
   return (
     <Router>

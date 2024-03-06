@@ -2,8 +2,10 @@ import React, { useState,useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Alert } from "react-bootstrap";
+import { API_URL } from "../../Links";
+
 
 
 const UpdatePolicy = () => {
@@ -48,22 +50,20 @@ const UpdatePolicy = () => {
     });
   };
     
-    useEffect(() => {
-       const fetchPolicy = async () => {
-         try {
-           const response = await axios.get(
-             `http://localhost:4000/policy/${policyId}`
-             );
-            console.log(response.data.policy);
-           setFormData(response.data.policy);
-         } catch (error) {
-           setErrorMessage("Error fetching claims");
-           console.error("Error fetching claims:", error.data.response);
-         }
-       };
+  useEffect(() => {
+    const fetchPolicy = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/${policyId}`);
+        console.log(response.data.policy);
+        setFormData(response.data.policy);
+      } catch (error) {
+        setErrorMessage("Error fetching claims");
+        console.error("Error fetching claims:", error.data.response);
+      }
+    };
 
-       fetchPolicy();
-   },[])
+    fetchPolicy();
+  }, [policyId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

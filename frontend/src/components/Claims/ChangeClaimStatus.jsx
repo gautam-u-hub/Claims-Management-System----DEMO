@@ -7,6 +7,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { API_URL } from "../../Links";
+
 
 
 const ChangeClaimStatus = () => {
@@ -22,9 +24,7 @@ const ChangeClaimStatus = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:4000/TPA/claims/${claimId}`
-        );
+        const response = await axios.get(`${API_URL}/TPA/claims/${claimId}`);
         setClaim(response.data.claim);
         console.log(response.data);
         setLastPaymentDate(response.data.lastPaymentDate);
@@ -36,7 +36,7 @@ const ChangeClaimStatus = () => {
     };
 
     fetchData(); // Call the async function
-  }, []);
+  }, [claimId]);
   const [claim, setClaim] = useState("");
   const [status, setStatus] = useState(""); // State to manage selected status
 

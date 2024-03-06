@@ -3,6 +3,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
+import { API_URL } from "../../Links";
+
 
 const NewPolicy = () => {
   const [formData, setFormData] = useState({
@@ -70,7 +72,6 @@ const handleSubmit = async (event) => {
   let isValid = true;
   const newFormErrors = { ...formErrors };
 
-  // Check for empty fields
   for (const key in formData) {
     if (formData.hasOwnProperty(key) && formData[key] === "") {
       newFormErrors[key] = `Please enter ${key
@@ -80,7 +81,6 @@ const handleSubmit = async (event) => {
     }
   }
 
-  // Validate date range
   if (
     formData.startDate >= formData.endDate
   ) {
@@ -112,11 +112,8 @@ const handleSubmit = async (event) => {
       headers: { "content-Type": "application/json" },
     };
 
-    const { data } = await axios.post(
-      `http://localhost:4000/policy`,
-      formData,
-      config
-    );
+    const { data } = await axios.post(`${API_URL}/policy`, formData, config);
+    console.log(data);
     setSuccessMessage("Policy Created Successfully");
   } catch (e) {
     setErrorMessage("Error creating the policy");

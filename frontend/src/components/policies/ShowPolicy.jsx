@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
+import { API_URL } from "../../Links";
 
 
 const ShowPolicy = () => {
@@ -21,10 +22,11 @@ const handleSubmit = async (e) => {
     };
 
     const { data } = await axios.post(
-      `http://localhost:4000/assign-policy/${policyId}`,
+      `${API_URL}/assign-policy/${policyId}`,
       { email },
       config
     );
+    console.log(data);
 
     setSuccessMessage("Policy assigned successfully");
     setErrorMessage(null);

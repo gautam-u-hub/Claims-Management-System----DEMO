@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { API_URL } from "../../Links";
 
 const ClaimDetails = () => {
   const { claimId } = useParams();
@@ -9,9 +10,7 @@ const ClaimDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:4000/claims/${claimId}`
-        );
+        const response = await axios.get(`${API_URL}/claims/${claimId}`);
         setClaim(response.data.claim);
         // Process the response here
       } catch (error) {
@@ -20,7 +19,7 @@ const ClaimDetails = () => {
     };
 
     fetchData(); // Call the async function
-  }, []);
+  }, [claimId]);
 
   const getStatusColor = (status) => {
     switch (status) {
