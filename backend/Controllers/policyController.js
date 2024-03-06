@@ -3,6 +3,8 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors.js");
 const crypto = require("crypto");
 const Policy = require("../models/policyModel.js");
 const User = require("../models/userModel.js");
+const Claim = require("../models/claimModel.js");
+
 
 // Create Policy -- Admin
 
@@ -77,20 +79,8 @@ exports.updatePolicyById = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Delete a policy by ID -- Admin
 
-exports.deletePolicyById = catchAsyncErrors(async (req, res, next) => {
-    const policy = await Policy.findByIdAndDelete(req.params.id);
 
-    if (!policy) {
-        return next(new ErrorHandler('Policy not found', 404));
-    }
-
-    res.status(200).json({
-        success: true,
-        message: 'Policy deleted successfully'
-    });
-});
 
 exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
     const { email } = req.body;
@@ -128,3 +118,39 @@ exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+
+exports.deletePolicyById = catchAsyncErrors(async (req, res, next) => {
+    console.log("hi");
+    const policyId = req.params.id;
+    const deletedPolicy = await Policy.findByIdAndDelete(policyId);
+
+    if (!deletedPolicy) {
+        throw new Error('Policy not found');
+    }
+
+    await Claim.deleteMany({ policyId: policyId });
+
+    const users = await User.find({ 'policies.policy': policyId });
+
+    for (let i = 0; i < users.length; i++) {
+        const currentUser = users[i];
+        const updatedPolicies = [];
+
+        for (let j = 0; j < currentUser.policies.length; j++) {
+            const policy = currentUser.policies[j];
+            if (policy.policy.toString() !== policyId.toString()) {
+                updatedPolicies.push(policy);
+            }
+        }
+
+        currentUser.policies = updatedPolicies;
+        await currentUser.save();
+    }
+
+    res.status(200).json({
+        success: true,
+        message:"Deleted the policy"
+    });
+
+
+});

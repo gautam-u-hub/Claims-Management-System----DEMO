@@ -20,7 +20,6 @@ exports.createClaim = catchAsyncErrors(async (req, res, next) => {
     let foundPolicy = null;
     for (const policy of user.policies) {
         if (policy._id.toString() === policyId.toString()) {
-            console.log("hhdscbdjkfvnzdfm")
             foundPolicy = policy;
             break;
         }
@@ -162,3 +161,13 @@ exports.updateClaimStatusById = catchAsyncErrors(async (req, res, next) => {
         claim
     });
 });
+
+
+
+
+
+
+
+
+
+
