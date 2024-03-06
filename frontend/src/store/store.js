@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 
 import { persistReducer } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
+import errorSlice from "./error-slice";
 
 
 
@@ -17,6 +18,7 @@ const persistConfig = {
 const reducer = combineReducers({
     policy: policySlice.reducer,
     user: userSlice.reducer,
+    error:errorSlice.reducer
 
 })
 const persistedReducer = persistReducer(persistConfig,reducer);

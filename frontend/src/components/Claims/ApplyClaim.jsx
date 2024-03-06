@@ -27,6 +27,11 @@ const ApplyClaim = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!policyId || !claimAmount || !description) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
     try {
       const config = {
         headers: { "Content-Type": "application/json" },
@@ -61,12 +66,13 @@ const ApplyClaim = () => {
           className="validated-form"
           encType="multipart/form-data"
         >
+          {/* Policy Id */}
           <div className="mb-3">
             <label className="form-label" htmlFor="title">
               Policy Id:
             </label>
             <input
-              className="form-control"
+              className={`form-control ${!policyId && "is-invalid"}`}
               type="text"
               id="title"
               name="campground[title]"
@@ -74,9 +80,12 @@ const ApplyClaim = () => {
               value={policyId}
               readOnly
             />
-            <div className="valid-feedback">Looks good!</div>
+            {!policyId && (
+              <div className="invalid-feedback">Policy Id is required.</div>
+            )}
           </div>
 
+          {/* Claim Date */}
           <div className="mb-3">
             <label className="form-label" htmlFor="location">
               Claim Date:
@@ -93,6 +102,7 @@ const ApplyClaim = () => {
             <div className="valid-feedback">Looks good!</div>
           </div>
 
+          {/* Claim Amount */}
           <div className="mb-3">
             <label className="form-label" htmlFor="price">
               Claim Amount
@@ -103,7 +113,7 @@ const ApplyClaim = () => {
               </span>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${!claimAmount && "is-invalid"}`}
                 id="price"
                 placeholder="0.00"
                 aria-label="price"
@@ -113,23 +123,30 @@ const ApplyClaim = () => {
                 value={claimAmount}
                 onChange={(e) => setClaimAmount(e.target.value)}
               />
+              {!claimAmount && (
+                <div className="invalid-feedback">
+                  Claim Amount is required.
+                </div>
+              )}
             </div>
-            <div className="valid-feedback">Looks good!</div>
           </div>
 
+          {/* Description */}
           <div className="mb-3">
             <label className="form-label" htmlFor="description">
               Description
             </label>
             <textarea
-              className="form-control"
+              className={`form-control ${!description && "is-invalid"}`}
               id="description"
               name="campground[description]"
               required
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
-            <div className="valid-feedback">Looks good!</div>
+            {!description && (
+              <div className="invalid-feedback">Description is required.</div>
+            )}
           </div>
 
           <div className="mb-3">

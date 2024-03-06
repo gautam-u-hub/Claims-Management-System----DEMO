@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -6,7 +6,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../store/userAction";
+import { registerUser, clearErrors } from "../../store/userAction";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
@@ -17,7 +17,20 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user) || {};
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const { user } = useSelector((state) => state.user.user) || {};
+  const error = useSelector((state) => state.error);
+  useEffect(() => {
+    if (error && error.error) {
+      setErrorMessage(error.error);
+      dispatch(clearErrors());
+    }
+    if (user && user.name.length > 0) {
+      navigate("/");
+    }
+  }, [dispatch, error, user, navigate]);
+
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -29,7 +42,6 @@ const LoginForm = () => {
     event.preventDefault();
     try {
       dispatch(registerUser({ email, name, password })).then(() => {
-        navigate('/')
       });
     } catch (e) {
       console.error("Registration failed: ", e);
@@ -59,6 +71,12 @@ const LoginForm = () => {
               className="card-img-top"
             />
           </Card>
+          <br></br>
+          {errorMessage && (
+            <div className="alert alert-danger" role="alert">
+              {errorMessage}
+            </div>
+          )}
           <br />
           <h5 class="card-title">Register</h5>
           <br />
