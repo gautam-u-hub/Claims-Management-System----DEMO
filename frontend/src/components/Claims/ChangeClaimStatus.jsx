@@ -9,15 +9,13 @@ import { Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { API_URL } from "../../Links";
 
-
-
 const ChangeClaimStatus = () => {
   const [errorMessage, setErrorMessage] = useState(null); // State to manage error
   const [successMessage, setSuccessMessage] = useState(null);
-    const [lastPaymentDate, setLastPaymentDate] = useState(null);
+  const [lastPaymentDate, setLastPaymentDate] = useState(null);
+  const [paymentFrequency, setPaymentFrequency] = useState(null);
 
   const user = useSelector((state) => state.user.user.user);
-
 
   const { claimId } = useParams();
 
@@ -26,12 +24,11 @@ const ChangeClaimStatus = () => {
       try {
         const response = await axios.get(`${API_URL}/TPA/claims/${claimId}`);
         setClaim(response.data.claim);
-        console.log(response.data);
         setLastPaymentDate(response.data.lastPaymentDate);
+        setPaymentFrequency(response.data.paymentFrequency);
         // Process the response here
       } catch (error) {
         console.error("Error changing claim status:", error);
-        
       }
     };
 
@@ -54,10 +51,9 @@ const ChangeClaimStatus = () => {
       );
       console.log(data);
       setSuccessMessage("Claim Status Changed Succesfully");
-
     } catch (e) {
       console.log(e);
-      setErrorMessage("Error changing claim status")
+      setErrorMessage("Error changing claim status");
     }
   };
   useEffect(() => {
@@ -120,6 +116,21 @@ const ChangeClaimStatus = () => {
               name="lastPaymentDate"
               required
               value={lastPaymentDate}
+              readOnly
+            />
+            <div className="valid-feedback">Looks good!</div>
+          </div>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="location">
+              Payment Frequency:
+            </label>
+            <input
+              className="form-control readonly-input" // Apply the readonly-input class
+              type="text"
+              id="location"
+              name="paymentFrequency"
+              required
+              value={paymentFrequency}
               readOnly
             />
             <div className="valid-feedback">Looks good!</div>

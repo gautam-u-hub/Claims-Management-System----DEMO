@@ -6,12 +6,11 @@ import { Link } from "react-router-dom";
 
 const AllPolicies = () => {
   const dispatch = useDispatch();
-  const policies = useSelector((state) => state.policy.policies.policies)||[];
+  const policies = useSelector((state) => state.policy.policies.policies) || [];
+  const { user } = useSelector((state) => state.user.user);
   useEffect(() => {
     dispatch(getAllPolicies());
   }, [dispatch]);
-
-
 
   return (
     <>
@@ -35,12 +34,22 @@ const AllPolicies = () => {
                       Rs. {policy.premiumAmount}
                     </small>
                   </p>
-                  <Link
-                    to={`/show-policy/${policy._id}`}
-                    className="btn btn-primary"
-                  >
-                    Show Policy
-                  </Link>
+                  {user.role === "policyHolder" && (
+                    <Link
+                      to={`/buy-policy/${policy._id}`}
+                      className="btn btn-primary"
+                    >
+                      Buy Policy
+                    </Link>
+                  )}
+                  {user.role !== "policyHolder" && (
+                    <Link
+                      to={`/show-policy/${policy._id}`}
+                      className="btn btn-primary ml-2"
+                    >
+                      Show Policy
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

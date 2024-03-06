@@ -28,6 +28,10 @@ exports.createClaim = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Policy not found', 404));
     }
     
+    if (claimAmount < 0) {
+        return next(new ErrorHandler("Claim can't be created because claimAmount cannot be negative"));
+    }
+
     if (foundPolicy.leftAmount < claimAmount) {
         return next(new ErrorHandler("Claim can't be created because the claim amount is higher than the sum assured left", 400));
     }
@@ -107,7 +111,8 @@ exports.getClaimById = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         claim,
-        lastPaymentDate:policy.lastPaymentDate
+        lastPaymentDate: policy.lastPaymentDate,
+        paymentFrequency:policy.paymentFrequency
     });
 });
 

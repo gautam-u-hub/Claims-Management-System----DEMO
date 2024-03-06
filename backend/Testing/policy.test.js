@@ -8,8 +8,8 @@ describe('Protected Routes', () => {
         const loginResponse = await request(app)
             .post('/auth/login')
             .send({
-                email: 'test@example.com',
-                password: 'password123'
+                email: 'admin7@gmail.com',
+                password: 'password'
             });
 
         token = loginResponse.body.token;

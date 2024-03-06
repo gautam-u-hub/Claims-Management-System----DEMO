@@ -46,6 +46,7 @@ function CustomNavbar() {
                 <Nav.Link href="/all-users">All Users </Nav.Link>
               </>
             )}
+            <Nav.Link href="/all-policies">All Policies</Nav.Link>
           </Nav>
           <Nav>
             {!currentUser.user ? (

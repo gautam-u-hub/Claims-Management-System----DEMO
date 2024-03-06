@@ -8,19 +8,19 @@ describe('Claim Routes', () => {
         const loginResponse = await request(app)
             .post('/auth/login')
             .send({
-                email: 'test@example.com',
-                password: 'password123'
+                email: 'policyHolder7@gmail.com',
+                password: 'password'
             });
 
         token = loginResponse.body.token;
     });
 
     it('should create a claim with valid token', async () => {
-        const policyId = '65e5b15d60c2d4ef3bbabe09';
+        const policyId = '65e84e94109a1dea7eaa481e';
 
         const claimData = {
             claimDate: new Date('2023-01-01'),
-            claimAmount: Math.floor(Math.random() * 10000) + 1000,
+            claimAmount: 0.5,
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
         };
 

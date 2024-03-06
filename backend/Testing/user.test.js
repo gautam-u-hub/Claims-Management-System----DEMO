@@ -19,8 +19,8 @@ describe('User API endpoints', () => {
         const res = await request(app)
             .post('/auth/login')
             .send({
-                email: 'test@example.com',
-                password: 'password123'
+                email: 'admin7@gmail.com',
+                password: 'password'
             });
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('token');
@@ -32,7 +32,7 @@ const loginAndGetToken = async () => {
     const loginResponse = await request(app)
         .post('/auth/login')
         .send({
-            email: 'admin1@gmail.com', 
+            email: 'admin7@gmail.com', 
             password: 'password' 
         });
 

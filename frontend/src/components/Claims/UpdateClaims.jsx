@@ -50,6 +50,10 @@ const UpdateClaims = () => {
       setError("Please fill in all required fields.");
       return;
     }
+    if (claim.claimAmount < 0) {
+      setError("Claim Amount cannot be negative");
+      return;
+    }
 
     try {
       const config = {
@@ -63,7 +67,6 @@ const UpdateClaims = () => {
       );
       console.log(data);
 
-      // Handle successful claim update here, if needed
       setSuccess("Claim Updated Successfully");
     } catch (error) {
       setError(error.response.data.message);
@@ -83,7 +86,6 @@ const UpdateClaims = () => {
           className="validated-form"
           encType="multipart/form-data"
         >
-          {/* Claim Amount */}
           <div className="mb-3">
             <label className="form-label" htmlFor="price">
               Claim Amount

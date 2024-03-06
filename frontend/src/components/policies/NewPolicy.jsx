@@ -88,7 +88,6 @@ const handleSubmit = async (event) => {
     isValid = false;
   }
 
-  // Validate premium amount
   const premiumAmount = parseFloat(formData.premiumAmount);
   if (isNaN(premiumAmount) || premiumAmount <= 0) {
     newFormErrors.premiumAmount = "Premium amount must be a positive number.";

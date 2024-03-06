@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 router.route("/policy").post(isAuthenticatedUser, authorizeRoles("admin"), createPolicy);
-router.route("/policies").get(isAuthenticatedUser, authorizeRoles("admin", "TPA"), getAllPolicies);
+router.route("/policies").get(getAllPolicies);
 router.route("/user/policies").get(isAuthenticatedUser, getAllUserPolicies);
 
 router.route("/policy/:id").get(isAuthenticatedUser,getPolicyById);

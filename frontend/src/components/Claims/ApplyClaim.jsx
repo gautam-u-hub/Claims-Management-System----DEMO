@@ -29,6 +29,33 @@ const ApplyClaim = () => {
       setError("Please fill in all required fields.");
       return;
     }
+    if (claimAmount < 0) {
+      setError("Claim Amount cannot be negative");
+      return;
+    }
+    const lastPaymentDate = new Date(lastPaymentDate);
+    const paymentFrequency = paymentFrequency; // Assuming payment frequency is in months
+    let nextExpectedPaymentDate;
+    if (paymentFrequency === "monthly") {
+      nextExpectedPaymentDate = new Date(lastPaymentDate);
+      nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 1);
+    } else if (paymentFrequency === "quarterly") {
+      nextExpectedPaymentDate = new Date(lastPaymentDate);
+      nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 3);
+    } else if (paymentFrequency === "yearly") {
+      nextExpectedPaymentDate = new Date(lastPaymentDate);
+      nextExpectedPaymentDate.setFullYear(
+        nextExpectedPaymentDate.getFullYear() + 1
+      );
+    }
+
+    const currentDate = new Date();
+    if (nextExpectedPaymentDate < currentDate) {
+      setError(
+        "Premium is overdue. Cannot apply for the claim "
+      );
+      return;
+    }
 
     try {
       const config = {
@@ -42,14 +69,10 @@ const ApplyClaim = () => {
       );
       console.log(data);
 
-      // Handle successful claim creation here, if needed
       setSuccess("Claim Created Successfully");
     } catch (error) {
       setError(error.response.data.message);
     }
-
-    setClaimAmount("");
-    setDescription("");
   };
 
   return (
@@ -65,7 +88,6 @@ const ApplyClaim = () => {
           className="validated-form"
           encType="multipart/form-data"
         >
-          {/* Policy Id */}
           <div className="mb-3">
             <label className="form-label" htmlFor="title">
               Policy Id:
@@ -84,7 +106,6 @@ const ApplyClaim = () => {
             )}
           </div>
 
-          {/* Claim Date */}
           <div className="mb-3">
             <label className="form-label" htmlFor="location">
               Claim Date:
@@ -101,7 +122,6 @@ const ApplyClaim = () => {
             <div className="valid-feedback">Looks good!</div>
           </div>
 
-          {/* Claim Amount */}
           <div className="mb-3">
             <label className="form-label" htmlFor="price">
               Claim Amount
@@ -117,7 +137,7 @@ const ApplyClaim = () => {
                 placeholder="0.00"
                 aria-label="price"
                 aria-describedby="price-label"
-                name="campground[price]"
+                name="claimAmount"
                 required
                 value={claimAmount}
                 onChange={(e) => setClaimAmount(e.target.value)}
@@ -130,7 +150,6 @@ const ApplyClaim = () => {
             </div>
           </div>
 
-          {/* Description */}
           <div className="mb-3">
             <label className="form-label" htmlFor="description">
               Description

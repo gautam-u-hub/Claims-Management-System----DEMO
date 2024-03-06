@@ -83,10 +83,11 @@ exports.updatePolicyById = catchAsyncErrors(async (req, res, next) => {
 
 
 exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
-    const { email } = req.body;
     const policyId = req.params.id;
+    const userId = req.user._id;
 
-    let user = await User.findOne({ email });
+    let user = await User.findById(userId);
+    
     const policy = await Policy.findById(policyId);
 
     if (!user) {
@@ -106,6 +107,8 @@ exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
     }
 
     const { sumAssured } = policy;
+    
+    
 
     user.policies.push({ _id: policy._id, leftAmount: sumAssured });
 
