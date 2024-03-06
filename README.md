@@ -2,6 +2,40 @@
 
 Welcome to Claim Management System! This is a brief description of what my web app does.
 
+## Overview
+
+The Claim Management System provides a centralized platform for managing claims for organizations or insurance companies. It facilitates various functionalities tailored to different user roles:
+
+### Common Functionalities:
+
+- **Add New Claims**: Users can easily create new claims by providing necessary information.
+  
+- **Update Existing Claims**: Existing claims can be modified with updated information or status changes.
+  
+- **View Claim Details**: Users have access to detailed information about each claim, including its status, policy details, and related documentation.
+
+### Insurance Companies:
+
+For insurance companies, the system offers additional functionalities tailored to their requirements:
+
+- **Create New Policy**: Insurance companies can define and create new insurance policies with specific terms and conditions.
+  
+- **Assign Policy to User**: Once policies are created, they can be assigned to users or policyholders as per their requirements.
+  
+- **Reimburse Payments**: Insurance companies can manage payment reimbursements for claims based on policy terms and user eligibility.
+
+### Third Party Administrators (TPAs):
+
+For TPAs handling claims on behalf of insurance companies, the system provides functionalities to streamline their workflow:
+
+- **Check Claim Details**: TPAs can access detailed information about claims they are handling, including policy details and claimant information.
+  
+- **Change Claim Status**: TPAs have the authority to update the status of claims, providing transparency and real-time updates to all stakeholders involved.
+
+By providing these tailored functionalities, the Claim Management System aims to enhance efficiency, transparency, and collaboration in managing claims across various entities involved in the process.
+
+
+
 ## Technologies Used
 
 - **Frontend**: React.js, React Router Dom, Bootstrap, Redux 
