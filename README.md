@@ -10,3 +10,9 @@ To get started with this project, follow these steps:
 
 ```bash
 git clone "https://github.com/gautam-u-hub/Claims-Management-System----DEMO/new/master?filename=README.md"
+
+2. Install dependencies using npm:
+
+```bash
+npm i
+
