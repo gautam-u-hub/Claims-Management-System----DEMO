@@ -15,4 +15,12 @@ git clone "https://github.com/gautam-u-hub/Claims-Management-System----DEMO/new/
 
 ```bash
 npm i
+```
+## Usage
 
+To start the development server and run the web app, use the following command:
+
+
+```bash
+npm run dev
+```
