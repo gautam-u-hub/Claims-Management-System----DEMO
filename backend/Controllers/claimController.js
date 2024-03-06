@@ -5,7 +5,6 @@ const Policy = require("../models/policyModel.js");
 const User = require("../models/userModel.js");
 const Claim = require("../models/claimModel.js");
 
-// Create a new claim
 exports.createClaim = catchAsyncErrors(async (req, res, next) => {
     const { claimDate, claimAmount, description } = req.body;
     const policyId = req.params.id;
@@ -143,7 +142,6 @@ exports.deleteClaimById = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Update the status of a claim by ID
 exports.updateClaimStatusById = catchAsyncErrors(async (req, res, next) => {
     const { status } = req.body;
 

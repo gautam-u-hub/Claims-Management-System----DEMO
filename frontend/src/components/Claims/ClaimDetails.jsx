@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../Links";
 
 const ClaimDetails = () => {
+  const navigate = useNavigate();
   const { claimId } = useParams();
   const [claim, setClaim] = useState(null);
 
@@ -12,14 +13,31 @@ const ClaimDetails = () => {
       try {
         const response = await axios.get(`${API_URL}/claims/${claimId}`);
         setClaim(response.data.claim);
-        // Process the response here
       } catch (error) {
         console.error("Error fetching claims:", error);
       }
     };
 
-    fetchData(); // Call the async function
+    fetchData();
   }, [claimId]);
+
+  const deleteClaim = async (event) => {
+    try {
+      const config = {
+        headers: { "content-Type": "application/json" },
+      };
+
+      await axios.delete(`${API_URL}/claims/${claimId}`, config);
+      alert("Claim deleted successfully");
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting claim:", error);
+    }
+  };
+
+  const updateClaim = async (event) => {
+    navigate(`/update-claims/${claimId}`);
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -35,35 +53,53 @@ const ClaimDetails = () => {
   };
 
   return (
-    <div className="row">
+    <div className="container mt-5">
       <h1 className="text-center mb-4">Claim Details</h1>
-      <div className="col-md-6 offset-md-3">
-        {claim && (
-          <div className="card">
-            <div className="card-body">
-              <div className="border-bottom mb-3 pb-3">
-                <h5 className="card-title">Policy Id</h5>
-                <p className="card-text">{claim._id}</p>
-              </div>
-              <div className="border-bottom mb-3 pb-3">
-                <h5 className="card-title">Claim Date</h5>
-                <p className="card-text">{claim.claimDate}</p>
-              </div>
-              <div className="border-bottom mb-3 pb-3">
-                <h5 className="card-title">Claim Amount</h5>
-                <p className="card-text">Rs. {claim.claimAmount}</p>
-              </div>
-              <div className="border-bottom mb-3 pb-3">
-                <h5 className="card-title">Description</h5>
-                <p className="card-text">{claim.description}</p>
-              </div>
-              <div className={`fw-bold ${getStatusColor(claim.status)}`}>
-                <h5 className="card-title">Status</h5>
-                <p className="card-text">{claim.status}</p>
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          {claim && (
+            <div className="card">
+              <div className="card-body">
+                <div className="mb-3">
+                  <h5 className="card-title">Policy ID</h5>
+                  <p className="card-text">{claim._id}</p>
+                </div>
+                <div className="mb-3">
+                  <h5 className="card-title">Claim Date</h5>
+                  <p className="card-text">{claim.claimDate}</p>
+                </div>
+                <div className="mb-3">
+                  <h5 className="card-title">Claim Amount</h5>
+                  <p className="card-text">Rs. {claim.claimAmount}</p>
+                </div>
+                <div className="mb-3">
+                  <h5 className="card-title">Description</h5>
+                  <p className="card-text">{claim.description}</p>
+                </div>
+                <div className={`fw-bold ${getStatusColor(claim.status)}`}>
+                  <h5 className="card-title">Status</h5>
+                  <p className="card-text">{claim.status}</p>
+                </div>
+                <div className="d-grid gap-2 mt-4">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={deleteClaim}
+                  >
+                    Delete Claim
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={updateClaim}
+                  >
+                    Update Claim
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'https://lively-panda-d4bb46.netlify.app', 
+    origin: ['https://lively-panda-d4bb46.netlify.app','http://localhost:3000'], 
     credentials: true
 }));
 
@@ -39,15 +39,10 @@ app.use(
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 
-// Route Imports
 const userRoutes = require("./routes/userRoutes");
 const policyRoutes = require("./routes/policyRoutes");
 const claimRoutes = require("./routes/claimRoutes");
-app.get('/set-cookie', (req, res) => {
-    // Set cookie
-    res.cookie('myCookie', 'cookieValue', { maxAge: 900000, httpOnly: true });
-    res.send('Cookie set successfully');
-});
+
 app.use("", userRoutes);
 app.use("", policyRoutes);
 app.use("", claimRoutes);

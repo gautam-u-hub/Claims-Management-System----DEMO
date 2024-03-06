@@ -120,7 +120,6 @@ exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
 
 
 exports.deletePolicyById = catchAsyncErrors(async (req, res, next) => {
-    console.log("hi");
     const policyId = req.params.id;
     const deletedPolicy = await Policy.findByIdAndDelete(policyId);
 

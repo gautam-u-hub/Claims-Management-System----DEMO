@@ -1,74 +1,92 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
 import { API_URL } from "../../Links";
 
-
 const ShowPolicy = () => {
-  
-const user = useSelector((state) => state.user.user.user);
-const { policyId } = useParams();
-const [email, setEmail] = useState("");
-const [successMessage, setSuccessMessage] = useState(null);
-const [errorMessage, setErrorMessage] = useState(null);
+  const Navigate = useNavigate();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const config = {
-      headers: { "content-Type": "application/json" },
-    };
+  const user = useSelector((state) => state.user.user.user);
+  const { policyId } = useParams();
+  const [email, setEmail] = useState("");
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-    const { data } = await axios.post(
-      `${API_URL}/assign-policy/${policyId}`,
-      { email },
-      config
-    );
-    console.log(data);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        headers: { "content-Type": "application/json" },
+      };
 
-    setSuccessMessage("Policy assigned successfully");
-    setErrorMessage(null);
-  } catch (error) {
-    setErrorMessage(error.response.data.message);
-    setSuccessMessage(null);
-  }
-  };
-  
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setSuccessMessage(null);
-        setErrorMessage(null);
-      }, 15000);
-      return () => clearTimeout(timer);
-    }, [successMessage, errorMessage]);
+      const { data } = await axios.post(
+        `${API_URL}/assign-policy/${policyId}`,
+        { email },
+        config
+      );
 
-const policy = useSelector((state) => {
-  // Assuming policies are stored in state.policy.policies
-  const policies = state.policy.policies.policies;
-  // Loop through policies array to find the policy with the matching policyId
-  for (let i = 0; i < policies.length; i++) {
-    // console.log(policies[i]._id, policyId);
-    if (policies[i]._id === policyId) {
-      return policies[i];
+      setSuccessMessage("Policy assigned successfully");
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+      setSuccessMessage(null);
     }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSuccessMessage(null);
+      setErrorMessage(null);
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [successMessage, errorMessage]);
+
+  const policy = useSelector((state) => {
+    // Assuming policies are stored in state.policy.policies
+    const policies = state.policy.policies.policies;
+    // Loop through policies array to find the policy with the matching policyId
+    for (let i = 0; i < policies.length; i++) {
+      // console.log(policies[i]._id, policyId);
+      if (policies[i]._id === policyId) {
+        return policies[i];
+      }
+    }
+
+    // If policy with matching ID is not found, return null or handle accordingly
+    return null;
+  });
+
+  const DeletePolicy = async (event) => {
+    try {
+      const config = {
+        headers: { "content-Type": "application/json" },
+      };
+
+      const { data } = await axios.delete(
+        `${API_URL}/policy/${policyId}`,
+        { email },
+        config
+      );
+
+      setSuccessMessage("Policy deleted successfully");
+      setErrorMessage(null);
+      alert("Policy Deleted");
+      Navigate("/");
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+      setSuccessMessage(null);
+    }
+  };
+
+  if (!policy) {
+    return <div>No policy exists with this id </div>;
   }
 
-  // If policy with matching ID is not found, return null or handle accordingly
-  return null;
-});
-
-if (!policy) {
-  return <div>No policy exists with this id on your account </div>;
-}
-
-const handleEmailChange = (e) => {
-  setEmail(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
-  
-
-
 
   return (
     <div className="container">
@@ -168,6 +186,13 @@ const handleEmailChange = (e) => {
               >
                 Update Policy
               </Link>
+              <button
+                type="submit"
+                className="btn btn-danger"
+                onClick={DeletePolicy}
+              >
+                Delete Policy
+              </button>
             </div>
           )}
         </div>

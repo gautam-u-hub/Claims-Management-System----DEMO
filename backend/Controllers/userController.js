@@ -36,7 +36,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     }
 
     const user = await User.findOne({ email }).select("+password");
-    
+
     if (!user) {
         return next(new ErrorHandler("Invalid email or password", 401));
     }
@@ -234,12 +234,36 @@ exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-exports.getAllUsers = catchAsyncErrors(async (req,res,next) => {
+exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
     const users = await User.find({});
     res.send({
         success: true,
         users
     })
+});
+
+
+exports.deleteUserById = catchAsyncErrors(async (req, res, next) => {
+    console.log(req.params);
+    const userId = req.params.id;
+
+    try {
+        const deletedUser = await User.findByIdAndDelete(userId);
+
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({
+            message: 'User deleted successfully',
+            success: true
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server error',
+            success: false
+        });
+    }
 })
 
 

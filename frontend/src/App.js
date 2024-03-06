@@ -20,7 +20,9 @@ import UpdatePolicy from './components/policies/UpdatePolicy.jsx';
 import Home from './components/partials/Home.jsx';
 import Footer from './components/partials/Footer.jsx';
 import AuthRoute from './AuthRoute.jsx';
-import AdminRoute from './AdminRoute.jsx'
+import AdminRoute from './AdminRoute.jsx';
+import UpdateClaims from './components/Claims/UpdateClaims.jsx';
+import AllUsers from "./components/AllUsers";
 
 axios.defaults.withCredentials = true;
 
@@ -39,7 +41,7 @@ function App() {
           <Route path='show-policy/:policyId' element={<ShowPolicy />} />
           <Route path='/your-claims' element={<UserClaims />} />
           <Route path='/user-claims/:claimId' element={<ClaimDetails />} />
-
+          <Route path='/update-claims/:claimId' element={<UpdateClaims />} />
 
 
         </Route>
@@ -56,7 +58,7 @@ function App() {
           <Route path='assign-policy' element={<AssignPolicy />} />
           <Route path='update-policy/:policyId' element={<UpdatePolicy />} />
 
-
+          <Route path='/all-users' element={<AllUsers/>}/>
 
         </Route>
 

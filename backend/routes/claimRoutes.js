@@ -1,6 +1,6 @@
 const express = require("express");
 const { createClaim, getAllClaims, updateClaimStatusById, getLoggedInUserClaims, getUserClaimById, getClaimById, updateClaimById, deleteClaimById } = require("../Controllers/claimController");
-const { isAuthenticatedUser, checkUserPolicyOwnership, authorizeRoles, checkUserClaimOwnership, } = require("../middleware/auth"); // Corrected middleware import
+const { isAuthenticatedUser, checkUserPolicyOwnership, authorizeRoles, checkUserClaimOwnership, } = require("../middleware/auth"); 
 
 const router = express.Router();
 
