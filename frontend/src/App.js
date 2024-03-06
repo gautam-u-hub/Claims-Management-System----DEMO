@@ -19,7 +19,6 @@ import ClaimDetails from './components/Claims/ClaimDetails.jsx';
 import UpdatePolicy from './components/policies/UpdatePolicy.jsx';
 import Home from './components/partials/Home.jsx';
 import Footer from './components/partials/Footer.jsx';
-import { useSelector } from 'react-redux';
 import AuthRoute from './AuthRoute.jsx';
 import AdminRoute from './AdminRoute.jsx'
 
