@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
 import { API_URL } from "../../Links";
+import { useSelector } from "react-redux";
 
 const ApplyClaim = () => {
   const { policyId } = useParams();
@@ -33,29 +34,31 @@ const ApplyClaim = () => {
       setError("Claim Amount cannot be negative");
       return;
     }
-    const lastPaymentDate = new Date(lastPaymentDate);
-    const paymentFrequency = paymentFrequency; // Assuming payment frequency is in months
-    let nextExpectedPaymentDate;
-    if (paymentFrequency === "monthly") {
-      nextExpectedPaymentDate = new Date(lastPaymentDate);
-      nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 1);
-    } else if (paymentFrequency === "quarterly") {
-      nextExpectedPaymentDate = new Date(lastPaymentDate);
-      nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 3);
-    } else if (paymentFrequency === "yearly") {
-      nextExpectedPaymentDate = new Date(lastPaymentDate);
-      nextExpectedPaymentDate.setFullYear(
-        nextExpectedPaymentDate.getFullYear() + 1
-      );
-    }
+    // const lastPremiumDate = user.policies.find(
+    //   (policy) => policy._id === policyId
+    // )?.lastPremiumDate;
+    // const paymentFrequency = policy.paymentFrequency; 
+    // let nextExpectedPaymentDate;
+    // if (paymentFrequency === "monthly") {
+    //   nextExpectedPaymentDate = new Date(lastPremiumDate);
+    //   nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 1);
+    // } else if (paymentFrequency === "quarterly") {
+    //   nextExpectedPaymentDate = new Date(lastPremiumDate);
+    //   nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 3);
+    // } else if (paymentFrequency === "yearly") {
+    //   nextExpectedPaymentDate = new Date(lastPremiumDate);
+    //   nextExpectedPaymentDate.setFullYear(
+    //     nextExpectedPaymentDate.getFullYear() + 1
+    //   );
+    // }
 
-    const currentDate = new Date();
-    if (nextExpectedPaymentDate < currentDate) {
-      setError(
-        "Premium is overdue. Cannot apply for the claim "
-      );
-      return;
-    }
+    // const currentDate = new Date();
+    // if (nextExpectedPaymentDate < currentDate) {
+    //   setError(
+    //     "Premium is overdue. Cannot apply for the claim "
+    //   );
+    //   return;
+    // }
 
     try {
       const config = {

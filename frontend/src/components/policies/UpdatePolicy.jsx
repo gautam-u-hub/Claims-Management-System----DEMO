@@ -49,38 +49,10 @@ const UpdatePolicy = () => {
     });
   };
 
-  const handleStartDateChange = (date) => {
-    setFormData({
-      ...formData,
-      startDate: date,
-    });
-    setFormErrors({
-      ...formErrors,
-      startDate: date ? "" : "Please select a start date.",
-    });
-  };
 
-  const handleEndDateChange = (date) => {
-    setFormData({
-      ...formData,
-      endDate: date,
-    });
-    setFormErrors({
-      ...formErrors,
-      endDate: date ? "" : "Please select an end date.",
-    });
-  };
 
-  const handleLastPaymentDateChange = (date) => {
-    setFormData({
-      ...formData,
-      lastPaymentDate: date,
-    });
-    setFormErrors({
-      ...formErrors,
-      lastPaymentDate: date ? "" : "Please select a last payment date.",
-    });
-  };
+
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -97,16 +69,7 @@ const UpdatePolicy = () => {
       }
     }
 
-    if (formData.startDate >= formData.endDate) {
-      newFormErrors.endDate = "End date must be after start date.";
-      isValid = false;
-    }
-
-    if (formData.startDate >= formData.lastPaymentDate) {
-      newFormErrors.lastPaymentDate =
-        "Last payment date must be after start date.";
-      isValid = false;
-    }
+   
 
     const premiumAmount = parseFloat(formData.premiumAmount);
     if (isNaN(premiumAmount) || premiumAmount <= 0) {
@@ -189,57 +152,8 @@ const UpdatePolicy = () => {
             />
             <div className="invalid-feedback">{formErrors.policyType}</div>
           </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="startDate">
-              Start Date:
-            </label>
-            <br />
-            <DatePicker
-              selected={formData.startDate}
-              onChange={handleStartDateChange}
-              className={`form-control ${
-                formErrors.startDate ? "is-invalid" : ""
-              }`}
-              name="startDate"
-              dateFormat="MM/dd/yyyy"
-              required
-            />
-            <div style={{ color: "red" }}>{formErrors.startDate}</div>
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="endDate">
-              End Date:
-            </label>
-            <br />
-            <DatePicker
-              selected={formData.endDate}
-              onChange={handleEndDateChange}
-              className={`form-control ${
-                formErrors.endDate ? "is-invalid" : ""
-              }`}
-              name="endDate"
-              dateFormat="MM/dd/yyyy"
-              required
-            />
-            <div style={{ color: "red" }}>{formErrors.endDate}</div>
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="lastPaymentDate">
-              Last Payment Date:
-            </label>
-            <br />
-            <DatePicker
-              selected={formData.lastPaymentDate}
-              onChange={handleLastPaymentDateChange}
-              className={`form-control ${
-                formErrors.lastPaymentDate ? "is-invalid" : ""
-              }`}
-              name="lastPaymentDate"
-              dateFormat="MM/dd/yyyy"
-              required
-            />
-            <div style={{ color: "red" }}>{formErrors.lastPaymentDate}</div>
-          </div>
+         
+          
           <div className="mb-3">
             <label className="form-label" htmlFor="policyTerm">
               Policy Term:

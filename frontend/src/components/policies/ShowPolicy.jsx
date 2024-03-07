@@ -84,9 +84,7 @@ const ShowPolicy = () => {
     return <div>No policy exists with this id </div>;
   }
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+ 
 
   return (
     <div className="container">
@@ -101,16 +99,7 @@ const ShowPolicy = () => {
             <h5 className="card-title">Policy Type</h5>
             <p className="card-text font-weight-bold">{policy.policyType}</p>
           </div>
-          <hr />
-          <div className="mb-3">
-            <h5 className="card-title">Start Date</h5>
-            <p className="card-text font-weight-bold">{policy.startDate}</p>
-          </div>
-          <hr />
-          <div className="mb-3">
-            <h5 className="card-title">End Date</h5>
-            <p className="card-text font-weight-bold">{policy.endDate}</p>
-          </div>
+
           <hr />
           <div className="mb-3">
             <h5 className="card-title">Premium Amount</h5>
@@ -153,31 +142,18 @@ const ShowPolicy = () => {
               >
                 Apply for Claim
               </Link>
+              <span style={{ margin: "0 10px" }}></span>
+              <Link
+                to={`/update-payment/${policy._id}`}
+                className="btn btn-primary"
+              >
+                Update Premium Payment Date
+              </Link>
             </div>
           )}
 
           <br />
-          {user.role === "admin" && (
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="inputEmail" className="form-label">
-                  Applicant's Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="inputEmail"
-                  value={email}
-                  required
-                  onChange={handleEmailChange}
-                />
-              </div>
 
-              <button type="submit" className="btn btn-primary">
-                Assign Policy
-              </button>
-            </form>
-          )}
           {user.role === "admin" && (
             <div className="text-center mt-4">
               <Link

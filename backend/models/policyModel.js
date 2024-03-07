@@ -5,14 +5,6 @@ const policySchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter policy type"]
     },
-    startDate: {
-        type: Date,
-        required: [true, "Please enter start date of the policy"]
-    },
-    endDate: {
-        type: Date,
-        required: [true, "Please enter end date of the policy"]
-    },
     premiumAmount: {
         type: Number,
         required: [true, "Please enter premium amount"],
@@ -25,7 +17,7 @@ const policySchema = new mongoose.Schema({
         type: String,
     },
     policyTerm: {
-        type: String,
+        type: Number,
         required: [true, "Please enter policy term"],
     },
     paymentFrequency: {

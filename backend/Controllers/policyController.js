@@ -82,12 +82,12 @@ exports.updatePolicyById = catchAsyncErrors(async (req, res, next) => {
 
 
 
-exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
+exports.buyPolicy = catchAsyncErrors(async (req, res, next) => {
     const policyId = req.params.id;
     const userId = req.user._id;
 
     let user = await User.findById(userId);
-    
+
     const policy = await Policy.findById(policyId);
 
     if (!user) {
@@ -98,19 +98,21 @@ exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Policy not found', 404));
     }
 
+    // Check if the user already has the policy
     if (user.policies.some(policy => policy._id.toString() === policyId)) {
         return next(new ErrorHandler('User already has this policy', 400));
     }
+
+    const { sumAssured } = policy;
+    const startDate = Date.now();
+    const endDate = startDate + policy.policyTerm * (365 * 24 * 60 * 60 * 1000);
+    const lastPremiumPayment = Date.now();
 
     if (!user.policies) {
         user.policies = [];
     }
 
-    const { sumAssured } = policy;
-    
-    
-
-    user.policies.push({ _id: policy._id, leftAmount: sumAssured });
+    user.policies.push({ _id: policy._id, leftAmount: sumAssured, startDate, endDate, lastPremiumPayment });
 
     await user.save({ validateBeforeSave: false });
 
@@ -119,6 +121,7 @@ exports.assignPolicyToUser = catchAsyncErrors(async (req, res, next) => {
         message: 'Policy assigned to user successfully',
         user
     });
+
 });
 
 
@@ -156,3 +159,36 @@ exports.deletePolicyById = catchAsyncErrors(async (req, res, next) => {
 
 
 });
+
+
+exports.updateLastPremiumPaymentDate = catchAsyncErrors(async (req, res, next) => {
+  
+    const userId = req.user.id;
+    const policyId = req.params.id;
+    const lastPremiumPayment = req.body.lastPremiumPayment;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        return next(new ErrorHandler('User not found', 404));
+    }
+
+    // Find the index of the policy by ID in the user's policies array
+    const policyIndex = user.policies.findIndex(policy => policy._id.toString() === policyId.toString());
+
+    if (policyIndex === -1) {
+        return next(new ErrorHandler('Policy not found for this user', 404));
+    }
+
+    user.policies[policyIndex].lastPremiumPayment = lastPremiumPayment;
+    // console.log(user);
+    const userr=await User.findByIdAndUpdate(userId, user, {
+        new: true,
+        runValidators: true
+    });
+    console.log(userr);
+
+    res.status(200).json({ success: true, message: 'Last premium payment updated successfully' });
+    
+
+})

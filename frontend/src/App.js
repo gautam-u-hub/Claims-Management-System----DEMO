@@ -24,6 +24,7 @@ import AdminRoute from './AdminRoute.jsx';
 import UpdateClaims from './components/Claims/UpdateClaims.jsx';
 import AllUsers from "./components/AllUsers";
 import BuyPolicy from './components/policies/BuyPolicy.jsx';
+import UpdatePayment from './components/policies/UpdatePayment.jsx';
 
 axios.defaults.withCredentials = true;
 
@@ -44,6 +45,7 @@ function App() {
           <Route path='/user-claims/:claimId' element={<ClaimDetails />} />
           <Route path='/update-claims/:claimId' element={<UpdateClaims />} />
           <Route path='/buy-policy/:policyId' element={<BuyPolicy />} />
+          <Route path='/update-payment/:policyId' element={<UpdatePayment/>}/>
 
 
 

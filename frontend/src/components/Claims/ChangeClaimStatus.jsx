@@ -24,6 +24,7 @@ const ChangeClaimStatus = () => {
       try {
         const response = await axios.get(`${API_URL}/TPA/claims/${claimId}`);
         setClaim(response.data.claim);
+        console.log(response.data);
         setLastPaymentDate(response.data.lastPaymentDate);
         setPaymentFrequency(response.data.paymentFrequency);
         // Process the response here
@@ -45,7 +46,7 @@ const ChangeClaimStatus = () => {
       };
 
       const { data } = await axios.put(
-        `http://localhost:4000/TPA/claims/${claimId}`,
+        `${API_URL}/TPA/claims/${claimId}`,
         { status },
         config
       );

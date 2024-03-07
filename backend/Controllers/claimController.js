@@ -8,7 +8,7 @@ const Claim = require("../models/claimModel.js");
 exports.createClaim = catchAsyncErrors(async (req, res, next) => {
     const { claimDate, claimAmount, description } = req.body;
     const policyId = req.params.id;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     if (!policyId || !userId || !claimDate || !claimAmount || !description) {
         return next(new ErrorHandler('Please provide all required fields', 400));
@@ -16,20 +16,42 @@ exports.createClaim = catchAsyncErrors(async (req, res, next) => {
 
     const user = await User.findById(userId);
 
-    let foundPolicy = null;
-    for (const policy of user.policies) {
-        if (policy._id.toString() === policyId.toString()) {
-            foundPolicy = policy;
-            break;
-        }
+    if (!user) {
+        return next(new ErrorHandler('User not found', 404));
     }
+
+    let foundPolicy = user.policies.find(policy => policy._id.toString() === policyId.toString());
+    let policyFromDB = await Policy.findById(policyId);
 
     if (!foundPolicy) {
         return next(new ErrorHandler('Policy not found', 404));
     }
-    
+
     if (claimAmount < 0) {
-        return next(new ErrorHandler("Claim can't be created because claimAmount cannot be negative"));
+        return next(new ErrorHandler("Claim can't be created because claimAmount cannot be negative", 400));
+    }
+
+    const currentDate = new Date();
+    const lastPremiumDate = new Date(foundPolicy.lastPremiumPayment);
+
+    // Determine next expected payment date based on payment frequency
+    const nextExpectedPaymentDate = new Date(lastPremiumDate);
+    switch (policyFromDB.paymentFrequency) {
+        case "Monthly":
+            nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 1);
+            break;
+        case "Quarterly":
+            nextExpectedPaymentDate.setMonth(nextExpectedPaymentDate.getMonth() + 3);
+            break;
+        case "Yearly":
+            nextExpectedPaymentDate.setFullYear(nextExpectedPaymentDate.getFullYear() + 1);
+            break;
+        default:
+            return next(new ErrorHandler("Invalid payment frequency", 400));
+    }
+
+    if (nextExpectedPaymentDate < currentDate) {
+        return next(new ErrorHandler("Premium is overdue. Cannot apply for the claim ", 400));
     }
 
     if (foundPolicy.leftAmount < claimAmount) {
@@ -101,18 +123,42 @@ exports.getAllClaims = catchAsyncErrors(async (req, res, next) => {
 // Get a single claim by ID 
 exports.getClaimById = catchAsyncErrors(async (req, res, next) => {
     const claim = await Claim.findById(req.params.id);
-    const policy = await Policy.findById(claim.policyId);
-
 
     if (!claim) {
         return next(new ErrorHandler('Claim not found', 404));
     }
 
+    const policyId = claim.policyId;
+
+    if (!policyId) {
+        return next(new ErrorHandler('Policy ID not found in the claim', 400));
+    }
+
+    const user = await User.findById(claim.userId);
+
+    let userPolicy;
+    for (let i = 0; i < user.policies.length; i++) {
+        //console.log(user.policies);
+        if (user.policies[i]._id.toString() == policyId.toString()) {
+            console.log(user.policies[i]);
+            userPolicy = user.policies[i];
+            break;
+        }
+    }
+
+    if (!userPolicy) {
+        return next(new ErrorHandler('Policy not found for this user', 404));
+    }
+
+    const policy = await Policy.findById(policyId);
+
+    const lastPaymentDate = userPolicy.lastPremiumPayment;
+
     res.status(200).json({
         success: true,
         claim,
-        lastPaymentDate: policy.lastPaymentDate,
-        paymentFrequency:policy.paymentFrequency
+        lastPaymentDate,
+        paymentFrequency: policy.paymentFrequency
     });
 });
 

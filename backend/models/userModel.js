@@ -52,14 +52,12 @@ const userSchema = new mongoose.Schema({
         },
         startDate: {
             type: Date,
-            default: Date.now() - (365 * 24 * 60 * 60 * 1000)
         },
         endDate: {
             type: Date
         },
         lastPremiumPayment: {
             type: Date,
-            default: Date.now() - (60 * 24 * 60 * 60 * 1000)
         }
 
     }],

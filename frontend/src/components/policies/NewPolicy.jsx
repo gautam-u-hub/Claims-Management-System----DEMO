@@ -9,8 +9,6 @@ import { API_URL } from "../../Links";
 const NewPolicy = () => {
   const [formData, setFormData] = useState({
     policyType: "",
-    startDate: "",
-    endDate: "",
     policyTerm: "",
     paymentFrequency: "",
     premiumAmount: "",
@@ -19,8 +17,6 @@ const NewPolicy = () => {
   });
   const [formErrors, setFormErrors] = useState({
     policyType: "",
-    startDate: "",
-    endDate: "",
     policyTerm: "",
     paymentFrequency: "",
     premiumAmount: "",
@@ -44,27 +40,7 @@ const NewPolicy = () => {
     });
   };
 
-  const handleStartDateChange = (date) => {
-    setFormData({
-      ...formData,
-      startDate: date,
-    });
-    setFormErrors({
-      ...formErrors,
-      startDate: date ? "" : "Please select a start date.",
-    });
-  };
-
-  const handleEndDateChange = (date) => {
-    setFormData({
-      ...formData,
-      endDate: date,
-    });
-    setFormErrors({
-      ...formErrors,
-      endDate: date ? "" : "Please select an end date.",
-    });
-  };
+  
 
 const handleSubmit = async (event) => {
   event.preventDefault();
@@ -81,12 +57,7 @@ const handleSubmit = async (event) => {
     }
   }
 
-  if (
-    formData.startDate >= formData.endDate
-  ) {
-    newFormErrors.endDate = "End date must be after start date.";
-    isValid = false;
-  }
+  
 
   const premiumAmount = parseFloat(formData.premiumAmount);
   if (isNaN(premiumAmount) || premiumAmount <= 0) {
@@ -152,43 +123,10 @@ const handleSubmit = async (event) => {
             />
             <div className="invalid-feedback">{formErrors.policyType}</div>
           </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="startDate">
-              Start Date:
-            </label>
-            <br />
-            <DatePicker
-              selected={formData.startDate}
-              onChange={handleStartDateChange}
-              className={`form-control ${
-                formErrors.startDate ? "is-invalid" : ""
-              }`}
-              name="startDate"
-              dateFormat="MM/dd/yyyy"
-              required
-            />
-            <div style={{ color: "red" }}>{formErrors.startDate}</div>
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="endDate">
-              End Date:
-            </label>
-            <br />
-            <DatePicker
-              selected={formData.endDate}
-              onChange={handleEndDateChange}
-              className={`form-control ${
-                formErrors.endDate ? "is-invalid" : ""
-              }`}
-              name="endDate"
-              dateFormat="MM/dd/yyyy"
-              required
-            />
-            <div style={{ color: "red" }}>{formErrors.endDate}</div>
-          </div>
+          
           <div className="mb-3">
             <label className="form-label" htmlFor="policyTerm">
-              Policy Term:
+              Policy Term (in years)
             </label>
             <input
               className={`form-control ${
