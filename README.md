@@ -68,6 +68,17 @@ git clone "https://github.com/gautam-u-hub/Claims-Management-System----DEMO/new/
 npm i
 ```
 
+
+Now you can configure your config.env file like this:-
+| Variable Name | Value                              |
+|---------------|------------------------------------|
+| PORT          | 4000                               |
+| DB_URI        | Your DB URI                        |
+| JWT_SECRET    | random                             |
+| JWT_EXPIRE    | 1d                                 |
+| COOKIE_EXPIRE | 1                                  |
+
+
 3. To start the development server and run the web app, use the following command:
 
 
@@ -79,12 +90,12 @@ npm run dev
 cd frontend
 ```
 
-6. Install dependencies
+5. Install dependencies
 ```bash
 npm install
 ```
 
-8. Start the development server
+6. Start the development server
 ```bash
 npm start
 ```
