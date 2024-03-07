@@ -72,6 +72,15 @@ exports.updatePolicyById = catchAsyncErrors(async (req, res, next) => {
     if (!policy) {
         return next(new ErrorHandler('Policy not found', 404));
     }
+    const premiumAmount = req.body.premiumAmount;
+    if (isNaN(premiumAmount) || premiumAmount <= 0) {
+        return next(new ErrorHandler("Premium amount must be a positive number.", 404))
+    }
+    const sumAssured = req.body.sumAssured;
+    if (isNaN(sumAssured) || sumAssured < 0) {
+        return next(new ErrorHandler("Sum Assured must be a positive number.", 404))
+
+    }
 
     res.status(200).json({
         success: true,

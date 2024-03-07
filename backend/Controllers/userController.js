@@ -77,7 +77,6 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Policy Holder not found", 404));
     }
 
-    // Get Reset Password Token
     const resetToken = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false });

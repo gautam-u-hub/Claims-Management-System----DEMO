@@ -34,7 +34,6 @@ exports.createClaim = catchAsyncErrors(async (req, res, next) => {
     const currentDate = new Date();
     const lastPremiumDate = new Date(foundPolicy.lastPremiumPayment);
 
-    // Determine next expected payment date based on payment frequency
     const nextExpectedPaymentDate = new Date(lastPremiumDate);
     switch (policyFromDB.paymentFrequency) {
         case "Monthly":
@@ -74,7 +73,6 @@ exports.createClaim = catchAsyncErrors(async (req, res, next) => {
 });
 
 
-// Get all claims of user by its id
 exports.getLoggedInUserClaims = catchAsyncErrors(async (req, res, next) => {
     const userId = req.user.id;
     const claims = await Claim.find({userId:userId});
@@ -112,7 +110,6 @@ exports.getUserClaimById = catchAsyncErrors( async (req,res,next)=> {
 })
 
 
-// Get all claims of 
 exports.getAllClaims = catchAsyncErrors(async (req, res, next) => {
     const claims = await Claim.find({});
     res.status(200).json({
@@ -120,7 +117,6 @@ exports.getAllClaims = catchAsyncErrors(async (req, res, next) => {
         claims
     });
 });
-// Get a single claim by ID 
 exports.getClaimById = catchAsyncErrors(async (req, res, next) => {
     const claim = await Claim.findById(req.params.id);
 
@@ -138,7 +134,6 @@ exports.getClaimById = catchAsyncErrors(async (req, res, next) => {
 
     let userPolicy;
     for (let i = 0; i < user.policies.length; i++) {
-        //console.log(user.policies);
         if (user.policies[i]._id.toString() == policyId.toString()) {
             console.log(user.policies[i]);
             userPolicy = user.policies[i];
@@ -162,12 +157,15 @@ exports.getClaimById = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Update a claim by ID
 exports.updateClaimById = catchAsyncErrors(async (req, res, next) => {
     const claim = await Claim.findByIdAndUpdate(req.params.id, req.body, {
         new: true, 
         runValidators: true 
     });
+
+    if (claim.status === "Approved"||claim.status==="Reimbursed") {
+        return next(new ErrorHandler("Claim cannot be updated as it has already been approved",400))
+    }
 
     if (!claim) {
         return next(new ErrorHandler('Claim not found', 404));
@@ -196,10 +194,23 @@ exports.deleteClaimById = catchAsyncErrors(async (req, res, next) => {
 exports.updateClaimStatusById = catchAsyncErrors(async (req, res, next) => {
     const { status } = req.body;
 
+   
     const claim = await Claim.findByIdAndUpdate(req.params.id, { status }, {
         new: true, 
         runValidators: true 
     });
+    if (status === "Approved") {
+        const user = await User.findById(claim.userId);
+        const policyId = claim.policyId;
+        const policyIndex = user.policies.findIndex(policy => policy._id.toString() === policyId.toString());
+
+        user.policies[policyIndex].leftAmount -=  claim.claimAmount;
+        const userr = await User.findByIdAndUpdate(claim.userId, user, {
+            new: true,
+            runValidators: true
+        });
+    }
+
 
     if (!claim) {
         return next(new ErrorHandler('Claim not found', 404));

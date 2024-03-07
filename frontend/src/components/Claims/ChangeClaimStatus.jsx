@@ -27,16 +27,15 @@ const ChangeClaimStatus = () => {
         console.log(response.data);
         setLastPaymentDate(response.data.lastPaymentDate);
         setPaymentFrequency(response.data.paymentFrequency);
-        // Process the response here
       } catch (error) {
         console.error("Error changing claim status:", error);
       }
     };
 
-    fetchData(); // Call the async function
+    fetchData(); 
   }, [claimId]);
   const [claim, setClaim] = useState("");
-  const [status, setStatus] = useState(""); // State to manage selected status
+  const [status, setStatus] = useState(""); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -96,12 +95,12 @@ const ChangeClaimStatus = () => {
               Claim Date:
             </label>
             <input
-              className="form-control readonly-input" // Apply the readonly-input class
+              className="form-control readonly-input"
               type="text"
               id="location"
               name="claimDate"
               required
-              value={claim.claimDate}
+              value={new Date(claim.claimDate).toLocaleDateString("en-GB")}
               readOnly
             />
             <div className="valid-feedback">Looks good!</div>
@@ -111,12 +110,12 @@ const ChangeClaimStatus = () => {
               Last Premium Payment Pay Date:
             </label>
             <input
-              className="form-control readonly-input" // Apply the readonly-input class
+              className="form-control readonly-input"
               type="text"
               id="location"
               name="lastPaymentDate"
               required
-              value={lastPaymentDate}
+              value={new Date(lastPaymentDate).toLocaleDateString("en-GB")}
               readOnly
             />
             <div className="valid-feedback">Looks good!</div>
@@ -126,7 +125,7 @@ const ChangeClaimStatus = () => {
               Payment Frequency:
             </label>
             <input
-              className="form-control readonly-input" // Apply the readonly-input class
+              className="form-control readonly-input"
               type="text"
               id="location"
               name="paymentFrequency"

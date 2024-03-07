@@ -78,20 +78,17 @@ userSchema.pre("save", async function (next) {
 })
 
 
-// JWT TOKEN
 userSchema.methods.getJWTToken = function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE,
     });
 };
 
-// Compare Password
 userSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 }
 
 
-// Generating Password Reset Token
 
 userSchema.methods.getResetPasswordToken = function () {
 

@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: ['https://lively-panda-d4bb46.netlify.app','http://localhost:3000'], 
+    origin: 'https://lively-panda-d4bb46.netlify.app', 
     credentials: true
 }));
 

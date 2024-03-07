@@ -152,8 +152,7 @@ const UpdatePolicy = () => {
             />
             <div className="invalid-feedback">{formErrors.policyType}</div>
           </div>
-         
-          
+
           <div className="mb-3">
             <label className="form-label" htmlFor="policyTerm">
               Policy Term:
@@ -175,17 +174,21 @@ const UpdatePolicy = () => {
             <label className="form-label" htmlFor="paymentFrequency">
               Payment Frequency:
             </label>
-            <input
+            <select
               className={`form-control ${
                 formErrors.paymentFrequency ? "is-invalid" : ""
               }`}
-              type="text"
               id="paymentFrequency"
               name="paymentFrequency"
               value={formData.paymentFrequency}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Select Payment Frequency</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
             <div className="invalid-feedback">
               {formErrors.paymentFrequency}
             </div>

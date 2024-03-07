@@ -13,6 +13,7 @@ const BuyPolicy = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
+    console.log(policy);
     const timer = setTimeout(() => {
       setSuccessMessage(null);
       setErrorMessage(null);

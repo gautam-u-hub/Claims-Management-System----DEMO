@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { Alert } from "react-bootstrap";
@@ -23,7 +22,7 @@ const NewPolicy = () => {
     termsAndConditions: "",
     sumAssured: "",
   });
-  const [errorMessage, setErrorMessage] = useState(null); // State to manage error
+  const [errorMessage, setErrorMessage] = useState(null); 
   const [successMessage, setSuccessMessage] = useState(null);
 
   const handleChange = (e) => {
@@ -36,7 +35,7 @@ const NewPolicy = () => {
       ...formErrors,
       [name]: value
         ? ""
-        : `Please enter ${name.replace(/([A-Z])/g, " $1").toLowerCase()}.`,
+        : `Please enter ${name.replace(/[A-Z]/g, match => ' ' + match.toLowerCase())}.`,
     });
   };
 
@@ -50,9 +49,10 @@ const handleSubmit = async (event) => {
 
   for (const key in formData) {
     if (formData.hasOwnProperty(key) && formData[key] === "") {
-      newFormErrors[key] = `Please enter ${key
-        .replace(/([A-Z])/g, " $1")
-        .toLowerCase()}.`;
+      newFormErrors[key] = `Please enter ${key.replace(
+        /[A-Z]/g,
+        (match) => " " + match.toLowerCase()
+      )}.`;
       isValid = false;
     }
   }
@@ -65,7 +65,6 @@ const handleSubmit = async (event) => {
     isValid = false;
   }
 
-  // Validate sum assured
   const sumAssured = parseFloat(formData.sumAssured);
   if (isNaN(sumAssured) || sumAssured < 0) {
     newFormErrors.sumAssured = "Sum assured must be a non-negative number.";
@@ -123,7 +122,7 @@ const handleSubmit = async (event) => {
             />
             <div className="invalid-feedback">{formErrors.policyType}</div>
           </div>
-          
+
           <div className="mb-3">
             <label className="form-label" htmlFor="policyTerm">
               Policy Term (in years)
@@ -145,17 +144,21 @@ const handleSubmit = async (event) => {
             <label className="form-label" htmlFor="paymentFrequency">
               Payment Frequency:
             </label>
-            <input
+            <select
               className={`form-control ${
                 formErrors.paymentFrequency ? "is-invalid" : ""
               }`}
-              type="text"
               id="paymentFrequency"
               name="paymentFrequency"
               value={formData.paymentFrequency}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Select Payment Frequency</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
             <div className="invalid-feedback">
               {formErrors.paymentFrequency}
             </div>
@@ -210,7 +213,7 @@ const handleSubmit = async (event) => {
                 required
               />
             </div>
-            <div className="invalid-feedback">{formErrors.sumAssured}</div>
+            <div style={{ color: "red" }}>{formErrors.sumAssured}</div>
           </div>
           <div className="mb-3">
             <label className="form-label" htmlFor="termsAndConditions">

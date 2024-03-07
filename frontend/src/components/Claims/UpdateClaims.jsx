@@ -116,7 +116,6 @@ const UpdateClaims = () => {
             </div>
           </div>
 
-          {/* Description */}
           <div className="mb-3">
             <label className="form-label" htmlFor="description">
               Description

@@ -8,10 +8,22 @@ const policySchema = new mongoose.Schema({
     premiumAmount: {
         type: Number,
         required: [true, "Please enter premium amount"],
+        validate: {
+            validator: function (value) {
+                return value > 0;
+            },
+            message: "Premium amount must be greater than zero"
+        }
     },
     sumAssured: {
         type: Number,
         required: [true, "Please enter sum assured"],
+        validate: {
+            validator: function (value) {
+                return value > 0;
+            },
+            message: "Sum assured must be greater than zero"
+        }
     },
     termsAndConditions: {
         type: String,
@@ -19,15 +31,20 @@ const policySchema = new mongoose.Schema({
     policyTerm: {
         type: Number,
         required: [true, "Please enter policy term"],
+        validate: {
+            validator: function (value) {
+                return value > 0;
+            },
+            message: "Policy term must be greater than zero"
+        }
     },
     paymentFrequency: {
         type: String,
         required: [true, "Please enter payment frequency"],
     },
     lastPaymentDate: {
-        type:Date
+        type: Date
     }
-
 });
 
 module.exports = mongoose.model("Policy", policySchema);

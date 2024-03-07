@@ -36,6 +36,7 @@ const ShowPolicy = () => {
   };
 
   useEffect(() => {
+    
     const timer = setTimeout(() => {
       setSuccessMessage(null);
       setErrorMessage(null);
@@ -44,19 +45,19 @@ const ShowPolicy = () => {
   }, [successMessage, errorMessage]);
 
   const policy = useSelector((state) => {
-    // Assuming policies are stored in state.policy.policies
     const policies = state.policy.policies.policies;
-    // Loop through policies array to find the policy with the matching policyId
     for (let i = 0; i < policies.length; i++) {
-      // console.log(policies[i]._id, policyId);
       if (policies[i]._id === policyId) {
         return policies[i];
       }
     }
 
-    // If policy with matching ID is not found, return null or handle accordingly
+    
+
     return null;
   });
+
+  
 
   const DeletePolicy = async (event) => {
     try {
@@ -90,9 +91,7 @@ const ShowPolicy = () => {
     <div className="container">
       <h1 className="text-center mb-4">Policy Details</h1>
       <div className="card">
-        {/* Display success message */}
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
-        {/* Display error message */}
         {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
         <div className="card-body">
           <div className="mb-3">

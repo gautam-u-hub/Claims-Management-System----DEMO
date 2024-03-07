@@ -9,17 +9,21 @@ const claimSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required:true
+        required: true
     },
-
-   
     claimDate: {
         type: Date,
         required: [true, "Claim date is required"]
     },
     claimAmount: {
         type: Number,
-        required: [true, "Claim amount is required"]
+        required: [true, "Claim amount is required"],
+        validate: {
+            validator: function (value) {
+                return value > 0;
+            },
+            message: "Claim amount must be greater than zero"
+        }
     },
     description: {
         type: String,
@@ -27,12 +31,9 @@ const claimSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Approved', 'Rejected' , 'Reimbursed'],
+        enum: ['Pending', 'Approved', 'Rejected', 'Reimbursed'],
         default: 'Pending'
-    },
-
-    
-
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Claim', claimSchema);
