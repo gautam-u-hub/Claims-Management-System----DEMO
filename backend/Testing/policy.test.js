@@ -9,7 +9,7 @@ describe('Protected Routes', () => {
             .post('/auth/login')
             .send({
                 email: 'admin7@gmail.com',
-                password: 'password'
+                password: 'passwordd'
             });
 
         token = loginResponse.body.token;
@@ -29,7 +29,7 @@ describe('Protected Routes', () => {
 
         expect(response.status).toBe(401);
     });
-    it('should access the protected route /policy with valid token', async () => {
+    it('should access the protected route /policy to create new policy with valid token', async () => {
         const policyData = {
             policyType: 'Car Insurance',
             startDate: new Date('2022-01-01'),

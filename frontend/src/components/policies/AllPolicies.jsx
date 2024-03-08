@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import image from "../../Images/Random.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllPolicies } from "../../store/policyActions";
@@ -8,8 +8,11 @@ const AllPolicies = () => {
   const dispatch = useDispatch();
   const policies = useSelector((state) => state.policy.policies.policies) || [];
   const { user } = useSelector((state) => state.user.user);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     dispatch(getAllPolicies());
+   
   }, [dispatch]);
 
   return (
@@ -34,7 +37,7 @@ const AllPolicies = () => {
                       Rs. {policy.premiumAmount}
                     </small>
                   </p>
-                  {user&&user.role === "policyHolder" && (
+                  {user && user.role === "policyHolder" && (
                     <Link
                       to={`/buy-policy/${policy._id}`}
                       className="btn btn-primary"
@@ -42,7 +45,7 @@ const AllPolicies = () => {
                       Buy Policy
                     </Link>
                   )}
-                  {user&&user.role !== "policyHolder" && (
+                  {user && user.role !== "policyHolder" && (
                     <Link
                       to={`/show-policy/${policy._id}`}
                       className="btn btn-primary ml-2"

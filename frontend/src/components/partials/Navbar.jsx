@@ -24,7 +24,10 @@ function CustomNavbar() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             {currentUser.user && (
-              <Nav.Link href="/">Hello {currentUser.user.name}</Nav.Link>
+              <>
+                <Nav.Link href="/">Hello {currentUser.user.name}</Nav.Link>
+                <Nav.Link href="/update-user">Update Profile</Nav.Link>
+              </>
             )}
             <Nav.Link href="/">Home</Nav.Link>
             {currentUser.user && currentUser.user.role === "policyHolder" && (

@@ -19,7 +19,7 @@ const UpdatePayment = () => {
         const { data } = await axios.get(`${API_URL}/user`);
         setUser(data.user);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        setErrorMessage(error.data.response.message)
       }
     };
 
@@ -52,8 +52,9 @@ const UpdatePayment = () => {
 
       setSuccessMessage("Updated Last Premium Payment Date");
     } catch (error) {
-      console.error("Error Updating ....", error);
-      setErrorMessage("Error Updating ....");
+      console.log(error);
+       setErrorMessage(error.response.data.message);
+
     }
   };
 

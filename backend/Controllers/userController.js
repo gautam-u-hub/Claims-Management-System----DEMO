@@ -5,19 +5,21 @@ const sendToken = require("../utils/jwtToken.js");
 const sendEmail = require("../utils/sendEmail.js")
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const Claim = require("../models/claimModel.js");
 
 
 // Register a User
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { name, email, password,phoneNumber } = req.body;
 
     const user = await User.create({
         name, email, password,
         avatar: {
             public_id: "this is a sample id",
             url: "profilepicurl"
-        }
+        },
+        phoneNumber
     });
 
 
@@ -69,19 +71,18 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 })
 
 
-// Forgot Password
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-        return next(new ErrorHandler("Policy Holder not found", 404));
+        return next(new ErrorHandler("User not found with the email id", 404));
     }
 
     const resetToken = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false });
-
-    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`;
+    console.log(req);
+    const resetPasswordUrl = `${req.protocol}://${"localhost:3000"}/password/reset/${resetToken}`;
 
     const message = `Your password reset token is : \n\n ${resetPasswordUrl} \n\n If not requested then ignore`;
 
@@ -111,7 +112,6 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
-
     const user = await User.findOne({
         resetPasswordToken,
         resetPasswordExpire: { $gt: Date.now() },
@@ -171,7 +171,8 @@ exports.updateUserPassword = catchAsyncErrors(async (req, res, next) => {
 exports.updateUserProfile = catchAsyncErrors(async (req, res, next) => {
     const newUserData = {
         name: req.body.name,
-        email: req.body.email
+        email: req.body.email,
+        phoneNumber:req.body.phoneNumber
     }
 
     const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
@@ -188,7 +189,6 @@ exports.updateUserProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 
-// may be admin
 exports.getAllPolicyHolders = catchAsyncErrors(async (req, res, next) => {
     const users = await User.find({ role: "policyHolder" });
     res.status(200).json({
@@ -197,7 +197,6 @@ exports.getAllPolicyHolders = catchAsyncErrors(async (req, res, next) => {
     });
 })
 
-// Get single user (admin)
 exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
@@ -212,12 +211,13 @@ exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 
-// update User Role -- Admin
 exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
     const newUserData = {
         name: req.body.name,
         email: req.body.email,
         role: req.body.role,
+        phoneNumber: req.body.phoneNumber
+
     };
 
     const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
@@ -243,7 +243,6 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
 
 
 exports.deleteUserById = catchAsyncErrors(async (req, res, next) => {
-    console.log(req.params);
     const userId = req.params.id;
 
     try {
@@ -252,6 +251,8 @@ exports.deleteUserById = catchAsyncErrors(async (req, res, next) => {
         if (!deletedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
+
+        await Claim.deleteMany({ userId: userId });
 
         res.status(200).json({
             message: 'User deleted successfully',

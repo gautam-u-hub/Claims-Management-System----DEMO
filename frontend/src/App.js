@@ -25,6 +25,10 @@ import UpdateClaims from './components/Claims/UpdateClaims.jsx';
 import AllUsers from "./components/AllUsers";
 import BuyPolicy from './components/policies/BuyPolicy.jsx';
 import UpdatePayment from './components/policies/UpdatePayment.jsx';
+import UpdateUser from './components/User/UpdateUser.jsx';
+import UpdatePassword from "./components/User/UpdatePassword.jsx";
+import ForgotPassword from './components/User/ForgotPassword.jsx';
+import ForgotPasswordReset from './components/User/ForgotPasswordReset.jsx';
 
 axios.defaults.withCredentials = true;
 
@@ -45,11 +49,13 @@ function App() {
           <Route path='/user-claims/:claimId' element={<ClaimDetails />} />
           <Route path='/update-claims/:claimId' element={<UpdateClaims />} />
           <Route path='/buy-policy/:policyId' element={<BuyPolicy />} />
-          <Route path='/update-payment/:policyId' element={<UpdatePayment/>}/>
+          <Route path='/update-payment/:policyId' element={<UpdatePayment />} />
+          <Route path='/update-password' element={<UpdatePassword/>}/>
 
 
 
         </Route>
+        <Route path='/update-user' element={<UpdateUser />} />
 
         <Route element={
           <AdminRoute />
@@ -70,7 +76,8 @@ function App() {
         <Route path='register' element={<Register />} />
         <Route path='/' element={<Home />} />
         <Route path='all-policies' element={<AllPolicies />} />
-
+        <Route path='/forgot-password' element={<ForgotPassword/>}/>
+        <Route path='/password/reset/:token' element={<ForgotPasswordReset/>}/>
 
       </Routes>
       <Footer />

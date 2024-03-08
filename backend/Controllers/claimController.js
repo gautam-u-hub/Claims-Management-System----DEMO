@@ -177,7 +177,6 @@ exports.updateClaimById = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Delete a claim by ID
 exports.deleteClaimById = catchAsyncErrors(async (req, res, next) => {
     const claim = await Claim.findByIdAndDelete(req.params.id);
 

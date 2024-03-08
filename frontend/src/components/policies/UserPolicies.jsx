@@ -1,20 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import image from "../../Images/Random.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUserPolicies } from "../../store/policyActions";
 import { Link } from "react-router-dom";
 
-const AllPolicies = () => {
+const UserPolicies = () => {
   const dispatch = useDispatch();
   const policies = useSelector((state) => state.policy.policies.policies) || [];
+  const [error, setError] = useState(null);
   useEffect(() => {
     dispatch(getAllUserPolicies());
+    if (policies.length === 0) {
+      setError("No policies in your account")
+    }
   }, [dispatch]);
 
   return (
     <>
       <div className="container">
         <h1>All Policies</h1>
+        {error && <p className="alert alert-danger">Error: {error}</p>}
 
         {policies.map((policy, index) => (
           <div className="card mb-3" key={index}>
@@ -49,4 +54,4 @@ const AllPolicies = () => {
   );
 };
 
-export default AllPolicies;
+export default UserPolicies;

@@ -39,14 +39,13 @@ export const logoutUser = () => {
     }
 };
 
-export const registerUser = ({ email, name, password }) => {
+export const registerUser = ({ email, name, password, phoneNumber }) => {
     return async (dispatch) => {
         try {
             const config = {
                 headers: { "content-type": "application/json" },
             };
-
-            const { data } = await axios.post(`${API_URL}/auth/register`, { name, email, password }, config);
+            const { data } = await axios.post(`${API_URL}/auth/register`, { name, email, password, phoneNumber }, config);
             dispatch(userAction.registerUser({
                 user: data.user
             }));
@@ -62,8 +61,8 @@ export const registerUser = ({ email, name, password }) => {
 export const clearErrors = () => {
     return async (dispatch) => {
         dispatch(errorActions.clearErrors({
-            error:null
+            error: null
         }))
     }
-    
+
 }

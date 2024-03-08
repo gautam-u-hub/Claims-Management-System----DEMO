@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: 'https://lively-panda-d4bb46.netlify.app', 
+    origin: ['https://lively-panda-d4bb46.netlify.app','http://localhost:3000'], 
     credentials: true
 }));
 
@@ -35,6 +35,8 @@ app.use(
         }
     })
 );
+
+
 
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));

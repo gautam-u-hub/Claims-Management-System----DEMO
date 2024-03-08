@@ -6,14 +6,18 @@ import { API_URL } from "../../Links";
 
 const AllClaims = () => {
   const [claims, setClaims] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClaims = async () => {
       try {
         const response = await axios.get(`${API_URL}/claims`);
         setClaims(response.data.claims);
+        if (claims.length === 0) {
+          setError("No claims in your account");
+        }
       } catch (error) {
-        console.error("Error fetching claims:", error);
+        setError(error.response.data.message);
       }
     };
 
@@ -37,6 +41,7 @@ const AllClaims = () => {
     <>
       <div className="container">
         <h1>Your Claims</h1>
+        {error && <p className="alert alert-danger">Error: {error}</p>}
 
         {claims.map((claim, index) => (
           <div className="card mb-3" key={index}>
@@ -64,7 +69,7 @@ const AllClaims = () => {
                     </small>
                   </p>
                   <Link
-                    to={`/user-claims/${claim._id}`} 
+                    to={`/user-claims/${claim._id}`}
                     className="btn btn-primary"
                   >
                     Show Claim

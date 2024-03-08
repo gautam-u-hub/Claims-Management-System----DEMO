@@ -4,7 +4,7 @@ const {
     createPolicy, getAllPolicies, getPolicyById, updatePolicyById, deletePolicyById
     , getAllUserPolicies,
     buyPolicy, updateLastPremiumPaymentDate } = require("../Controllers/policyController");
-const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
+const { isAuthenticatedUser, authorizeRoles, checkUserPolicyOwnership, apiKeyCheck } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -18,6 +18,6 @@ router.route("/policy/:id").put(isAuthenticatedUser, authorizeRoles("admin"), up
 router.route("/policy/:id").delete(isAuthenticatedUser, authorizeRoles("admin"), deletePolicyById);
 router.route("/buy-policy/:id").put(isAuthenticatedUser, buyPolicy);
 router.route("/policy/:id").delete(isAuthenticatedUser, authorizeRoles("admin"), deletePolicyById);
-router.route("/user/policy/:id").put(isAuthenticatedUser, updateLastPremiumPaymentDate)
+router.route("/user/policy/:id").put(isAuthenticatedUser,checkUserPolicyOwnership, updateLastPremiumPaymentDate)
 
 module.exports = router;

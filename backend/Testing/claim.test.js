@@ -28,7 +28,6 @@ describe('Claim Routes', () => {
             .post(`/claims/${policyId}`)
             .set('Cookie', [`token=${token}`])
             .send(claimData);
-        console.log(response);
         expect(response.status).toBe(200);
     });
 

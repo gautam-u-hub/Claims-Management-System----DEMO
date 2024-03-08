@@ -44,7 +44,6 @@ const LoginForm = () => {
       try {
         await dispatch(loginUser({ email, password }));
       } catch (e) {
-        // Handle login error
         console.error("Login failed:", e);
       }
     }
@@ -57,6 +56,9 @@ const LoginForm = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+  const forgotPasswordSubmit = (event) => {
+    navigate("/forgot-password");
+  }
 
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">
@@ -117,6 +119,8 @@ const LoginForm = () => {
             </Row>
             <Button type="submit">Login</Button>
           </Form>
+          <br />
+          <Button variant="link" onClick={forgotPasswordSubmit}>Forgot Password?</Button>
         </div>
       </div>
     </div>

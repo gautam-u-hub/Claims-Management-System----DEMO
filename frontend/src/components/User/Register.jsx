@@ -9,13 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser, clearErrors } from "../../store/userAction";
 import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+const Register = () => {
   const navigate = useNavigate();
 
   const [validated, setValidated] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -31,26 +32,45 @@ const LoginForm = () => {
     }
   }, [dispatch, error, user, navigate]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
+    if (!isValidPhoneNumber(phoneNumber)) {
+      setErrorMessage("Please enter the phone number in 10 digits");
+      event.preventDefault();
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setErrorMessage("Please enter a valid email address.");
+      event.preventDefault();
+      return;
+    }
 
     setValidated(true);
     event.preventDefault();
     try {
-      dispatch(registerUser({ email, name, password })).then(() => {
-      });
+     
+      await dispatch(registerUser({ name, email, phoneNumber, password }));
     } catch (e) {
       console.error("Registration failed: ", e);
     }
+  };
+  const isValidEmail = (email) => {
+    // Regular expression pattern to validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
   };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
+  const handlePhoneNumberChange = (event) => {
+      const inputPhoneNumber = event.target.value;
+      setPhoneNumber(inputPhoneNumber);
+    };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -58,6 +78,9 @@ const LoginForm = () => {
 
   const handleNameChange = (event) => {
     setName(event.target.value);
+  };
+  const isValidPhoneNumber = (phoneNumber) => {
+    return /^\d{10}$/.test(phoneNumber);
   };
 
   return (
@@ -119,6 +142,23 @@ const LoginForm = () => {
               </Form.Group>
             </Row>
 
+            <Form.Group controlId="formPhoneNumber">
+              <Form.Label>Phone Number</Form.Label>
+              <InputGroup>
+                <InputGroup.Text>+91</InputGroup.Text>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter phone number"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  required
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter a valid phone number.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="validationCustomPassword">
                 <Form.Label>Password</Form.Label>
@@ -137,7 +177,7 @@ const LoginForm = () => {
                 </InputGroup>
               </Form.Group>
             </Row>
-            <Button type="submit">Login</Button>
+            <Button type="submit">Submit</Button>
           </Form>
         </div>
       </div>
@@ -145,4 +185,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Register;

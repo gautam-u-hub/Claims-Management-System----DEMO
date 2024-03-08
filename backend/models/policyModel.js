@@ -43,7 +43,13 @@ const policySchema = new mongoose.Schema({
         required: [true, "Please enter payment frequency"],
     },
     lastPaymentDate: {
-        type: Date
+        type: Date,
+        validate: {
+            validator: function (value) {
+                return value <= new Date(); // Check if lastPaymentDate is not greater than today's date
+            },
+            message: "Last payment date cannot be greater than today's date"
+        }
     }
 });
 

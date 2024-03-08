@@ -2,24 +2,23 @@ const request = require('supertest');
 const app = require('../server'); 
 
 describe('User API endpoints', () => {
-    // it('should register a new user', async () => {
-    //     const res = await request(app)
-    //         .post('/auth/register')
-    //         .send({
-    //             name: 'Test User',
-    //             email: 'police1244@example.com',
-    //             password: 'password123'
-    //         });
-    //     // console.log(res);
-    //     expect(res.statusCode).toEqual(201);
-    //     expect(res.body).toHaveProperty('token');
-    // }, 50000);
+    it('should register a new user', async () => {
+        const res = await request(app)
+            .post('/auth/register')
+            .send({
+                name: 'testadmin',
+                email: 'testadmin@example.com',
+                password: 'password'
+            });
+        expect(res.statusCode).toEqual(201);
+        expect(res.body).toHaveProperty('token');
+    }, 50000);
 
     it('should log in an existing user', async () => {
         const res = await request(app)
             .post('/auth/login')
             .send({
-                email: 'admin7@gmail.com',
+                email: 'testadmin@example.com',
                 password: 'password'
             });
         expect(res.statusCode).toEqual(200);

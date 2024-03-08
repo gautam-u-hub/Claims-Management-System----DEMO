@@ -2,8 +2,13 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto")
+const crypto = require("crypto");
 
+
+
+function validatePhoneNumber(phoneNumber) {
+    return /^\d{10}$/.test(phoneNumber);
+}
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -40,6 +45,12 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'policyHolder',
+    },
+
+
+    phoneNumber: {
+        type: String,
+        validate: [validatePhoneNumber, 'Invalid phone number']
     },
 
     policies: [{

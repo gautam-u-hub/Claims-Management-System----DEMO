@@ -6,7 +6,6 @@ const User = require("../models/userModel.js");
 const Claim = require("../models/claimModel.js");
 
 
-// Create Policy -- Admin
 
 exports.createPolicy = catchAsyncErrors(async (req, res, next) => {
     const policy = await Policy.create(req.body);
@@ -17,14 +16,11 @@ exports.createPolicy = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Get all policies
 
 exports.getAllUserPolicies = catchAsyncErrors(async (req, res, next) => {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    // Extract policy IDs from the user's policies
     const policyIds = user.policies.map(policyObj => policyObj._id);
-    // Find all policies using the extracted policy IDs
     const policies = await Policy.find({ _id: { $in: policyIds } });
 
 
@@ -36,7 +32,6 @@ exports.getAllUserPolicies = catchAsyncErrors(async (req, res, next) => {
 
 exports.getAllPolicies = catchAsyncErrors(async (req, res, next) => {
 
-    // Find all policies using the extracted policy IDs
     const policies = await Policy.find({ });
 
 
@@ -46,7 +41,6 @@ exports.getAllPolicies = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Get a single policy by ID
 
 exports.getPolicyById = catchAsyncErrors(async (req, res, next) => {
     const policy = await Policy.findById(req.params.id);
@@ -61,7 +55,6 @@ exports.getPolicyById = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// Update a policy by ID -- Admin
 
 exports.updatePolicyById = catchAsyncErrors(async (req, res, next) => {
     const policy = await Policy.findByIdAndUpdate(req.params.id, req.body, {
@@ -107,7 +100,6 @@ exports.buyPolicy = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Policy not found', 404));
     }
 
-    // Check if the user already has the policy
     if (user.policies.some(policy => policy._id.toString() === policyId)) {
         return next(new ErrorHandler('User already has this policy', 400));
     }
@@ -182,7 +174,6 @@ exports.updateLastPremiumPaymentDate = catchAsyncErrors(async (req, res, next) =
         return next(new ErrorHandler('User not found', 404));
     }
 
-    // Find the index of the policy by ID in the user's policies array
     const policyIndex = user.policies.findIndex(policy => policy._id.toString() === policyId.toString());
 
     if (policyIndex === -1) {
@@ -190,12 +181,15 @@ exports.updateLastPremiumPaymentDate = catchAsyncErrors(async (req, res, next) =
     }
 
     user.policies[policyIndex].lastPremiumPayment = lastPremiumPayment;
-    // console.log(user);
+    if (lastPremiumPayment > date.now()) {
+        return next(new ErrorHandler('last premium payment date is greater than the current date', 404));
+
+    }
     const userr=await User.findByIdAndUpdate(userId, user, {
         new: true,
         runValidators: true
     });
-    console.log(userr);
+
 
     res.status(200).json({ success: true, message: 'Last premium payment updated successfully' });
     
