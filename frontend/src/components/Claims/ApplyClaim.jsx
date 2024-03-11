@@ -134,7 +134,7 @@ const ApplyClaim = () => {
             <textarea
               className={`form-control ${!description && "is-invalid"}`}
               id="description"
-              name="campground[description]"
+              name="description"
               required
               value={description}
               onChange={(e) => setDescription(e.target.value)}

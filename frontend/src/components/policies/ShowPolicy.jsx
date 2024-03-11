@@ -122,7 +122,7 @@ const ShowPolicy = () => {
           </div>
           <hr />
           <div className="mb-3">
-            <h5 className="card-title">Policy Term</h5>
+            <h5 className="card-title">Policy Term (In years)</h5>
             <p className="card-text font-weight-bold">{policy.policyTerm}</p>
           </div>
           <hr />

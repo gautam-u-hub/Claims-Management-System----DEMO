@@ -12,20 +12,38 @@ const ForgotPassword = () => {
   const [submitSuccess, setSubmitSuccess] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const [validated, setValidated] = useState(false);
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const config = {
-      headers: { "Content-Type": "application/json" },
-    };
+    const form = event.currentTarget;
+
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
     try {
+      const config = {
+        headers: { "Content-Type": "application/json" },
+      };
       await axios.post(`${API_URL}/auth/password/forgot`, { email }, config);
-      setSubmitSuccess("Please check your email for further process");
+      setSubmitSuccess("Please check your email for further instructions.");
+      setErrorMessage(null);
     } catch (error) {
       setErrorMessage(error.response.data.message);
+      setSubmitSuccess(null);
     }
   };
 
@@ -33,9 +51,9 @@ const ForgotPassword = () => {
     const clearMessages = setTimeout(() => {
       setSubmitSuccess(null);
       setErrorMessage(null);
-    }, 15000); 
+    }, 15000);
 
-    return () => clearTimeout(clearMessages); 
+    return () => clearTimeout(clearMessages);
   }, [submitSuccess, errorMessage]);
 
   return (
@@ -60,18 +78,22 @@ const ForgotPassword = () => {
             />
             <div className="card-body">
               <h5>Forgot Password?</h5>
-              <Form onSubmit={handleSubmit}>
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Row className="mb-3">
                   <Form.Group as={Col} md="12" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <InputGroup>
+                    <InputGroup hasValidation>
                       <Form.Control
                         type="email"
                         placeholder="Enter email"
                         value={email}
                         onChange={handleEmailChange}
                         required
+                        isInvalid={!!errorMessage}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        Please enter a valid email address.
+                      </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
                 </Row>

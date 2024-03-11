@@ -13,7 +13,7 @@ const restResponseTimeHistogram = new client.Histogram({
 const databaseresponseTimeHistogram = new client.Histogram({
     name: 'db_response_time_duration_seconds',
     help: 'Database response time in seconds',
-    labelNames:['operations','success']
+    labelNames: ['operations', 'success']
 })
 
 const startMetricsServer = () => {
@@ -24,9 +24,9 @@ const startMetricsServer = () => {
         return res.send(await client.register.metrics());
     });
 
-    app.listen(5000, () => {
-        console.log("Metrics server started at http://localhost:5000");
+    app.listen(process.env.METRICSPORT, () => {
+        console.log(`Metrics server started at http://localhost:${process.env.METRICSPORT}`);
     });
 };
 
-module.exports = { startMetricsServer,restResponseTimeHistogram };
+module.exports = { startMetricsServer, restResponseTimeHistogram };

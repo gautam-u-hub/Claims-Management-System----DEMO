@@ -25,7 +25,7 @@ exports.authorizeRoles = (...roles) => {
     return (req, res, next) => {
 
         if (!roles.includes(req.user.role)) {
-            return next(new ErrorHandler(`Role : ${req.user.role} is not allowed to access this resource`));
+            return next(new ErrorHandler(`Role : ${req.user.role} is not allowed to access this resource`,403));
         }
         
         next();
@@ -68,7 +68,7 @@ exports.checkUserClaimOwnership = catchAsyncErrors(async (req, res, next) => {
 
    
     if (claim.userId != userId) {
-        return next(new ErrorHandler("You are not authorized to access this claim", 401));
+        return next(new ErrorHandler("You are not authorized to access this claim", 403));
    }
 
     next();

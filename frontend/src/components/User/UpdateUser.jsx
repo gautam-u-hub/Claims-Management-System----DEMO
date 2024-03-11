@@ -6,58 +6,50 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import { Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser, clearErrors } from "../../store/userAction";
+import { clearErrors } from "../../store/userAction";
 import { useNavigate, Link } from "react-router-dom";
 import { API_URL } from "../../Links";
 import axios from "axios";
 
 const UpdateUser = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [validated, setValidated] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  let { user } = useSelector((state) => state.user.user) || {};
   const error = useSelector((state) => state.error);
+  const {user} = useSelector((state) => state.user.user);
+
   useEffect(() => {
     if (error && error.error) {
       setErrorMessage(error.error);
       dispatch(clearErrors());
+      setTimeout(() => {
+        setErrorMessage(null);
+        setValidated(false); // Clear validation state
+      }, 5000); // Clear error message after 5 seconds
     }
-    if (!(user && user.name.length > 0)) {
-      navigate("/");
-    }
-
-    setName(user.name);
-    setEmail(user.email);
-    setPhoneNumber(user.phoneNumber);
+      setName(user.name);
+      setEmail(user.email);
+      setPhoneNumber(user.phoneNumber);
   }, [dispatch, error, user, navigate]);
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     const form = event.currentTarget;
+
     if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    if (!isValidPhoneNumber(phoneNumber)) {
-      setErrorMessage("Please enter the phone number in 10 digits");
-      event.preventDefault();
-      return;
-    }
-    if (!isValidEmail(email)) {
-      setErrorMessage("Please enter a valid email address.");
-      event.preventDefault();
+      setValidated(true);
       return;
     }
 
-    setValidated(true);
-    event.preventDefault();
     try {
       const config = {
         headers: { "content-Type": "application/json" },
@@ -73,19 +65,24 @@ const UpdateUser = () => {
       );
 
       setSuccessMessage("User updated successfully");
+      setTimeout(() => {
+        setSuccessMessage(null);
+        setValidated(false);
+      }, 5000); 
     } catch (error) {
-      console.log(error);
       setErrorMessage(error.response.data.message);
     }
   };
-const isValidEmail = (email) => {
-  // Regular expression pattern to validate email format
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailPattern.test(email);
-};
+
+  const isValidEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
+
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value;
     setPhoneNumber(inputPhoneNumber);
@@ -93,9 +90,6 @@ const isValidEmail = (email) => {
 
   const handleNameChange = (event) => {
     setName(event.target.value);
-  };
-  const isValidPhoneNumber = (phoneNumber) => {
-    return /^\d{10}$/.test(phoneNumber);
   };
 
   return (

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Alert } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; // Import datepicker styles
+import "react-datepicker/dist/react-datepicker.css";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../../Links";
 
@@ -10,8 +10,11 @@ const UpdatePayment = () => {
   const [user, setUser] = useState({});
   const { policyId } = useParams();
   const [errorMessage, setErrorMessage] = useState(null);
+    const [inpErrorMessage, setInpErrorMessage] = useState(null);
+
   const [successMessage, setSuccessMessage] = useState(null);
   const [lastPaymentDate, setLastPaymentDate] = useState(null);
+  const [validated, setValidated] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -19,7 +22,7 @@ const UpdatePayment = () => {
         const { data } = await axios.get(`${API_URL}/user`);
         setUser(data.user);
       } catch (error) {
-        setErrorMessage(error.data.response.message)
+        setErrorMessage(error.data.response.message);
       }
     };
 
@@ -37,6 +40,20 @@ const UpdatePayment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    }
+    setValidated(true);
+
+    if (!lastPaymentDate) {
+      setInpErrorMessage("Please select a valid date.");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+      return;
+    }
+
     try {
       const config = {
         headers: {
@@ -51,10 +68,14 @@ const UpdatePayment = () => {
       );
 
       setSuccessMessage("Updated Last Premium Payment Date");
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 15000);
     } catch (error) {
-      console.log(error);
-       setErrorMessage(error.response.data.message);
-
+      setErrorMessage(error.response.data.message);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 15000);
     }
   };
 
@@ -66,7 +87,7 @@ const UpdatePayment = () => {
         {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
         <form
           noValidate
-          className="validated-form"
+          className={validated ? "was-validated" : ""}
           encType="multipart/form-data"
           onSubmit={handleSubmit}
         >
@@ -75,11 +96,14 @@ const UpdatePayment = () => {
               Last Premium Payment Date:
             </label>
             <DatePicker
-              className="form-control" // Apply Bootstrap form-control class
-              selected={lastPaymentDate} // Pass selected date
-              onChange={(date) => setLastPaymentDate(date)} // Handle date change
-              dateFormat="dd/MM/yyyy" // Set date format
+              className="form-control"
+              selected={lastPaymentDate}
+              onChange={(date) => setLastPaymentDate(date)}
+              dateFormat="dd/MM/yyyy"
+              id="lastPaymentDate"
+              required
             />
+            <div style={{ color: "red" }}>Please select a valid date.</div>
           </div>
           <div className="mb-3">
             <button type="submit" className="btn btn-success">

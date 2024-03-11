@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -24,19 +24,15 @@ const UpdatePassword = () => {
     event.stopPropagation();
 
     const form = event.currentTarget;
+
     if (form.checkValidity() === false) {
       setValidated(true);
       return;
     }
 
-    if (newPassword !== confirmPassword) {
-      setErrorMessage("New password and confirm password do not match.");
-      return;
-    }
-
     try {
       const config = {
-        headers: { "content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
       };
       const { data } = await axios.put(
         `${API_URL}/user/password`,
@@ -50,10 +46,17 @@ const UpdatePassword = () => {
       console.log(data);
       setSuccessMessage("Password Updated Successfully");
     } catch (error) {
-      setErrorMessage(error.response.data.error);
+      setErrorMessage(error.response.data.message);
     }
   };
+  useEffect(() => {
+    const clearMessages = setTimeout(() => {
+      setSuccessMessage("");
+      setErrorMessage("");
+    }, 5000);
 
+    return () => clearTimeout(clearMessages);
+  }, [successMessage, errorMessage]);
   return (
     <div className="container mt-5">
       <Row className="justify-content-center">
@@ -92,10 +95,11 @@ const UpdatePassword = () => {
                     placeholder="Enter new password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    minLength={8} // Minimum length of 8 characters
                     required
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter a new password.
+                    Please enter a new password with a minimum of 8 characters.
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formConfirmPassword">

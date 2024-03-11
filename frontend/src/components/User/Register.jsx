@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -19,16 +19,23 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const { user } = useSelector((state) => state.user.user) || {};
   const error = useSelector((state) => state.error);
+
   useEffect(() => {
     if (error && error.error) {
       setErrorMessage(error.error);
       dispatch(clearErrors());
+    } else {
+      setErrorMessage(null);
     }
     if (user && user.name.length > 0) {
-      navigate("/");
+      setSuccessMessage("Registration successful. Redirecting...");
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     }
   }, [dispatch, error, user, navigate]);
 
@@ -37,29 +44,18 @@ const Register = () => {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-    }
-    if (!isValidPhoneNumber(phoneNumber)) {
-      setErrorMessage("Please enter the phone number in 10 digits");
+    } else {
       event.preventDefault();
-      return;
+      try {
+        await dispatch(registerUser({ name, email, phoneNumber, password }));
+      } catch (e) {
+        console.error("Registration failed: ", e);
+      }
     }
-    if (!isValidEmail(email)) {
-      setErrorMessage("Please enter a valid email address.");
-      event.preventDefault();
-      return;
-    }
-
     setValidated(true);
-    event.preventDefault();
-    try {
-     
-      await dispatch(registerUser({ name, email, phoneNumber, password }));
-    } catch (e) {
-      console.error("Registration failed: ", e);
-    }
   };
+
   const isValidEmail = (email) => {
-    // Regular expression pattern to validate email format
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
@@ -67,10 +63,11 @@ const Register = () => {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
+
   const handlePhoneNumberChange = (event) => {
-      const inputPhoneNumber = event.target.value;
-      setPhoneNumber(inputPhoneNumber);
-    };
+    const inputPhoneNumber = event.target.value;
+    setPhoneNumber(inputPhoneNumber);
+  };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -79,6 +76,7 @@ const Register = () => {
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
+
   const isValidPhoneNumber = (phoneNumber) => {
     return /^\d{10}$/.test(phoneNumber);
   };
@@ -94,10 +92,15 @@ const Register = () => {
               className="card-img-top"
             />
           </Card>
-          <br></br>
+          <br />
           {errorMessage && (
             <div className="alert alert-danger" role="alert">
               {errorMessage}
+            </div>
+          )}
+          {successMessage && (
+            <div className="alert alert-success" role="alert">
+              {successMessage}
             </div>
           )}
           <br />
@@ -110,15 +113,16 @@ const Register = () => {
                 <Form.Label>Email</Form.Label>
                 <InputGroup hasValidation>
                   <Form.Control
-                    type="text"
+                    type="email"
                     placeholder="Email"
                     aria-describedby="inputGroupPrepend"
                     required
                     value={email}
                     onChange={handleEmailChange}
+                    isInvalid={!!errorMessage}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter your email.
+                    Please enter a valid email.
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
@@ -134,6 +138,7 @@ const Register = () => {
                     required
                     value={name}
                     onChange={handleNameChange}
+                    isInvalid={!!errorMessage}
                   />
                   <Form.Control.Feedback type="invalid">
                     Please enter your Name.
@@ -152,6 +157,7 @@ const Register = () => {
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
                   required
+                  isInvalid={!!errorMessage}
                 />
                 <Form.Control.Feedback type="invalid">
                   Please enter a valid phone number.
@@ -170,6 +176,7 @@ const Register = () => {
                     required
                     value={password}
                     onChange={handlePasswordChange}
+                    isInvalid={!!errorMessage}
                   />
                   <Form.Control.Feedback type="invalid">
                     Please enter a password.

@@ -79,7 +79,7 @@ const ChangeClaimStatus = () => {
               Policy Id:
             </label>
             <input
-              className="form-control readonly-input" // Apply the readonly-input class
+              className="form-control readonly-input" 
               type="text"
               id="title"
               name="campground[title]"
@@ -146,7 +146,7 @@ const ChangeClaimStatus = () => {
               </span>
               <input
                 type="text"
-                className="form-control readonly-input" // Apply the readonly-input class
+                className="form-control readonly-input" 
                 id="price"
                 placeholder="0.00"
                 aria-label="price"
@@ -165,7 +165,7 @@ const ChangeClaimStatus = () => {
               Description
             </label>
             <textarea
-              className="form-control readonly-input" // Apply the readonly-input class
+              className="form-control readonly-input"
               id="description"
               name="campground[description]"
               required
@@ -183,8 +183,8 @@ const ChangeClaimStatus = () => {
               className="form-select"
               id="status"
               name="status"
-              value={status} // Bind select value to status state
-              onChange={(e) => setStatus(e.target.value)} // Update status state on select change
+              value={status} 
+              onChange={(e) => setStatus(e.target.value)} 
               required
             >
               <option value="">Select status</option>

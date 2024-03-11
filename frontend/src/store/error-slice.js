@@ -15,6 +15,6 @@ const errorSlice = createSlice({
     }
 });
 
-export const errorActions = errorSlice.actions; // Destructure actions directly
+export const errorActions = errorSlice.actions; 
 
-export default errorSlice; // Exporting the reducer directly
+export default errorSlice; 

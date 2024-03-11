@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -72,13 +71,18 @@ const UpdatePolicy = () => {
    
 
     const premiumAmount = parseFloat(formData.premiumAmount);
-    if (isNaN(premiumAmount) || premiumAmount <= 0) {
+    if (  premiumAmount <= 0) {
       newFormErrors.premiumAmount = "Premium amount must be a positive number.";
       isValid = false;
     }
 
+    if (formData.policyTerm <= 0) {
+      newFormErrors.policyTerm = "Policy Term must be greater than 0";
+      isValid = false;
+    }
+
     const sumAssured = parseFloat(formData.sumAssured);
-    if (isNaN(sumAssured) || sumAssured < 0) {
+    if ( sumAssured < 0) {
       newFormErrors.sumAssured = "Sum assured must be a non-negative number.";
       isValid = false;
     }
@@ -155,7 +159,7 @@ const UpdatePolicy = () => {
 
           <div className="mb-3">
             <label className="form-label" htmlFor="policyTerm">
-              Policy Term:
+              Policy Term (in years):
             </label>
             <input
               className={`form-control ${

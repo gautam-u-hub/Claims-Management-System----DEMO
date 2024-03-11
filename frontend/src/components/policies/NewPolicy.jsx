@@ -60,14 +60,19 @@ const handleSubmit = async (event) => {
   
 
   const premiumAmount = parseFloat(formData.premiumAmount);
-  if (isNaN(premiumAmount) || premiumAmount <= 0) {
+  if (premiumAmount <= 0) {
     newFormErrors.premiumAmount = "Premium amount must be a positive number.";
     isValid = false;
   }
 
   const sumAssured = parseFloat(formData.sumAssured);
-  if (isNaN(sumAssured) || sumAssured < 0) {
+  if (sumAssured < 0) {
     newFormErrors.sumAssured = "Sum assured must be a non-negative number.";
+    isValid = false;
+  }
+
+  if (formData.policyTerm <= 0) {
+    newFormErrors.policyTerm = "Policy Term must be greater than 0";
     isValid = false;
   }
 

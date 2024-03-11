@@ -41,7 +41,6 @@ const AllClaims = () => {
       <div className="container">
         <h1>All Claims</h1>
 
-        {/* Display error message */}
         {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
         {claims.map((claim, index) => (
@@ -58,7 +57,7 @@ const AllClaims = () => {
                   <p
                     className="card-text"
                     style={{
-                      color: getStatusColor(claim.status), // Optional: Set text color to white for better readability
+                      color: getStatusColor(claim.status), 
                     }}
                   >
                     Status: {claim.status}
@@ -70,7 +69,7 @@ const AllClaims = () => {
                     </small>
                   </p>
                   <Link
-                    to={`/change-claim/${claim._id}`} // Adjust the link path as needed
+                    to={`/change-claim/${claim._id}`}
                     className="btn btn-primary"
                   >
                     Change Claim Status

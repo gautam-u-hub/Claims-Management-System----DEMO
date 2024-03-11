@@ -4,15 +4,15 @@ const claimSlice = createSlice({
     name: 'claims',
     initialState: {
         claims: {},
-        error: null // Initialize error as null
+        error: null 
     },
     reducers: {
         createClaimSuccess(state, action) {
             state.claims = action.payload;
-            state.error = null; // Clear error when operation is successful
+            state.error = null;
         },
         createClaimFailed(state, action) {
-            state.error = action.payload; // Set error message
+            state.error = action.payload; 
         }
     }
 });

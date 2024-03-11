@@ -66,7 +66,9 @@ const ClaimDetails = () => {
                 </div>
                 <div className="mb-3">
                   <h5 className="card-title">Claim Date</h5>
-                  <p className="card-text">{claim.claimDate}</p>
+                  <p className="card-text">
+                    {new Date(claim.claimDate).toLocaleDateString("en-GB")}
+                  </p>
                 </div>
                 <div className="mb-3">
                   <h5 className="card-title">Claim Amount</h5>

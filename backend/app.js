@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const errorMiddleware = require("./middleware/error");
 const cookieParser = require("cookie-parser");
-const cors = require("cors"); // Importing CORS
+const cors = require("cors"); 
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerJsDocs = YAML.load('./backend/api.yaml');
@@ -49,7 +49,6 @@ app.use("", userRoutes);
 app.use("", policyRoutes);
 app.use("", claimRoutes);
 
-// Middleware for errors
 app.use(errorMiddleware);
 
 module.exports = app;

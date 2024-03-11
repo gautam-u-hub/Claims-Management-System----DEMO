@@ -32,7 +32,7 @@ exports.getAllUserPolicies = catchAsyncErrors(async (req, res, next) => {
 
 exports.getAllPolicies = catchAsyncErrors(async (req, res, next) => {
 
-    const policies = await Policy.find({ });
+    const policies = await Policy.find({});
 
 
     res.status(200).json({
@@ -59,7 +59,7 @@ exports.getPolicyById = catchAsyncErrors(async (req, res, next) => {
 exports.updatePolicyById = catchAsyncErrors(async (req, res, next) => {
     const policy = await Policy.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
-        runValidators: true 
+        runValidators: true
     });
 
     if (!policy) {
@@ -155,7 +155,7 @@ exports.deletePolicyById = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        message:"Deleted the policy"
+        message: "Deleted the policy"
     });
 
 
@@ -163,7 +163,7 @@ exports.deletePolicyById = catchAsyncErrors(async (req, res, next) => {
 
 
 exports.updateLastPremiumPaymentDate = catchAsyncErrors(async (req, res, next) => {
-  
+
     const userId = req.user.id;
     const policyId = req.params.id;
     const lastPremiumPayment = req.body.lastPremiumPayment;
@@ -179,19 +179,18 @@ exports.updateLastPremiumPaymentDate = catchAsyncErrors(async (req, res, next) =
     if (policyIndex === -1) {
         return next(new ErrorHandler('Policy not found for this user', 404));
     }
-
     user.policies[policyIndex].lastPremiumPayment = lastPremiumPayment;
-    if (lastPremiumPayment > date.now()) {
+    if (new Date(lastPremiumPayment) > Date.now()) {
         return next(new ErrorHandler('last premium payment date is greater than the current date', 404));
 
     }
-    const userr=await User.findByIdAndUpdate(userId, user, {
+    const userr = await User.findByIdAndUpdate(userId, user, {
         new: true,
         runValidators: true
     });
 
 
     res.status(200).json({ success: true, message: 'Last premium payment updated successfully' });
-    
+
 
 })

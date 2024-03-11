@@ -11,7 +11,6 @@ const UserPolicies = () => {
   useEffect(() => {
     dispatch(getAllUserPolicies());
     if (policies.length === 0) {
-      setError("No policies in your account")
     }
   }, [dispatch]);
 

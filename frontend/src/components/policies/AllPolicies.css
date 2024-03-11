@@ -1,4 +1,4 @@
 .image-wrapper {
   display: flex;
-  align-items: stretch; /* Ensure the image stretches vertically */
+  align-items: stretch;
 }

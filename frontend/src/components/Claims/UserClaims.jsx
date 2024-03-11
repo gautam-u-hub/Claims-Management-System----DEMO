@@ -13,9 +13,7 @@ const AllClaims = () => {
       try {
         const response = await axios.get(`${API_URL}/claims`);
         setClaims(response.data.claims);
-        if (claims.length === 0) {
-          setError("No claims in your account");
-        }
+        
       } catch (error) {
         setError(error.response.data.message);
       }
@@ -57,7 +55,7 @@ const AllClaims = () => {
                   <p
                     className="card-text"
                     style={{
-                      color: getStatusColor(claim.status), // Optional: Set text color to white for better readability
+                      color: getStatusColor(claim.status),
                     }}
                   >
                     Status: {claim.status}
@@ -65,7 +63,8 @@ const AllClaims = () => {
 
                   <p className="card-text">
                     <small className="text-muted">
-                      Creation Date: {claim.claimDate}
+                      Creation Date:{" "}
+                      {new Date(claim.claimDate).toLocaleDateString("en-GB")}
                     </small>
                   </p>
                   <Link
