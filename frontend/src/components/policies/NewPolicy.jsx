@@ -76,10 +76,25 @@ const handleSubmit = async (event) => {
     isValid = false;
   }
 
-  if (!isValid) {
-    setFormErrors(newFormErrors);
-    return;
+  if (formData.policyTerm > 100) {
+    newFormErrors.policyTerm = "Policy Term cannot be greater than 100";
+    isValid = false;
   }
+
+  if (formData.sumAssured > 100000000000) {
+     newFormErrors.sumAssured =
+       "Policy Sum Assured cannot be greater than 100000000000";
+     isValid = false;
+  }
+  if (formData.premiumAmount > 100000000000) {
+    newFormErrors.sumAssured =
+      "Policy Premium Amount cannot be greater than 100000000000";
+    isValid = false;
+  }
+    if (!isValid) {
+      setFormErrors(newFormErrors);
+      return;
+    }
 
   try {
     const config = {
@@ -90,7 +105,8 @@ const handleSubmit = async (event) => {
     console.log(data);
     setSuccessMessage("Policy Created Successfully");
   } catch (e) {
-    setErrorMessage("Error creating the policy");
+    console.log(e);
+    setErrorMessage(e.response.data.message);
   }
 };
 

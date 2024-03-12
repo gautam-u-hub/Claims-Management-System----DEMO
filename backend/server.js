@@ -2,7 +2,6 @@ const app = require('./app'); // Ensure this path is correct
 const dotenv = require('dotenv');
 const connectDatabase = require("./config/database");
 const { startMetricsServer,restResponseTimeHistogram } = require("./utils/metrics");
-const responseTime = require("response-time");
 
 
 process.on("uncaughtException", (err) => {

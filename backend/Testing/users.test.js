@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../server'); 
 
 
+
 const loginAndGetToken = async () => {
     const loginResponse = await request(app)
         .post('/auth/login')
@@ -17,7 +18,7 @@ const loginAndGetTokenUser = async () => {
     const loginResponse = await request(app)
         .post('/auth/login')
         .send({
-            email: 'pH1@gmail.com',
+            email: 'policyHolderTest@gmail.com',
             password: 'password'
         });
     const token = loginResponse.body.token;
@@ -41,7 +42,7 @@ describe('Protected Routes', () => {
         expect(response.status).toBe(200);
     });
 
-    it('should access the protected policy holders route', async () => {
+    it('should access the protected all users route', async () => {
         const response = await request(app)
             .get('/all-users')
             .set('Cookie', [`token=${token}`]);
@@ -53,7 +54,6 @@ describe('Protected Routes', () => {
             .put(`/TPA/claims/${"65e976f52818a3ef3abb6b37"}`)
             .set('Cookie', [`token=${token}`])
             .send({ status: 'Reimbursed' });
-        console.log(response.body);
         expect(response.status).toBe(200);
         expect(response.body.claim.status).toBe('Reimbursed');
     });
@@ -77,12 +77,11 @@ describe('once again a protected route', () => {
     beforeEach(async () => {
         token = await loginAndGetTokenUser();
     });
-    it('should access the protected policy holders route', async () => {
+    it('should not access the admin route of all claims', async () => {
         const response = await request(app)
-            .get('/all-users')
+            .get('/TPA/claims')
             .set('Cookie', [`token=${token}`]);
-        console.log(response);
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(403);
     });
 
 
@@ -95,8 +94,8 @@ it('should register a new user', async () => {
     const res = await request(app)
         .post('/auth/register')
         .send({
-            name: 'testadmin',
-            email: 'testadmin@example.com',
+            name: 'testaadmin',
+            email: 'testaddddmin@example.com',
             password: 'password'
         });
     expect(res.statusCode).toEqual(201);

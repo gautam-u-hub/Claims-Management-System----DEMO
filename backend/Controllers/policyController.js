@@ -10,6 +10,26 @@ const Claim = require("../models/claimModel.js");
 exports.createPolicy = catchAsyncErrors(async (req, res, next) => {
     const policy = await Policy.create(req.body);
 
+    if (req.body.policyTerm > 100) {
+        return next(new ErrorHandler("Policy Term cannot be greater than 100 years", 401));
+    }
+
+    if (req.body.sumAssured > 100000000000) {
+        return next(new ErrorHandler("Policy SumAssured cannot be greater than 100000000000 rupees", 401));
+
+    }
+
+    if (req.body.premiumAmount > 100000000000) {
+        return next(new ErrorHandler("Policy Premium amount cannot be greater than 100000000000 rupees", 401));
+
+    }
+    const premiumAmount = parseInt(req.body.premiumAmount);
+    const sumAssured = parseInt(req.body.sumAssured);
+
+    if (premiumAmount > sumAssured) {
+        return next(new ErrorHandler("Policy Premium amount cannot be greater than sumAssured", 401));
+    }
+
     res.status(200).json({
         success: true,
         policy

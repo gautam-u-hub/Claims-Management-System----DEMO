@@ -18,18 +18,23 @@ const Register = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useDispatch();
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [nameError, setNameError] = useState(null);
+  const [phoneNumberError, setPhoneNumberError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [backendError, setBackendError] = useState(null);
 
   const { user } = useSelector((state) => state.user.user) || {};
-  const error = useSelector((state) => state.error);
+  const { error } = useSelector((state) => state.error);
 
   useEffect(() => {
-    if (error && error.error) {
-      setErrorMessage(error.error);
+    if (error) {
+      alert(error);
+      setBackendError(error);
       dispatch(clearErrors());
+      setTimeout(() => {}, 5000);
     } else {
-      setErrorMessage(null);
     }
     if (user && user.name.length > 0) {
       setSuccessMessage("Registration successful. Redirecting...");
@@ -40,19 +45,37 @@ const Register = () => {
   }, [dispatch, error, user, navigate]);
 
   const handleSubmit = async (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    } else {
-      event.preventDefault();
+    event.preventDefault();
+    setValidated(true);
+
+    if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+    }
+
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long.");
+    }
+
+    if (!name.trim()) {
+      setNameError("Please enter your name.");
+    }
+
+    if (!isValidPhoneNumber(phoneNumber)) {
+      setPhoneNumberError("Please enter a valid phone number.");
+    }
+
+    if (
+      isValidEmail(email) &&
+      password.length >= 8 &&
+      name.trim() &&
+      isValidPhoneNumber(phoneNumber)
+    ) {
       try {
         await dispatch(registerUser({ name, email, phoneNumber, password }));
       } catch (e) {
         console.error("Registration failed: ", e);
       }
     }
-    setValidated(true);
   };
 
   const isValidEmail = (email) => {
@@ -62,19 +85,22 @@ const Register = () => {
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+    setEmailError(null);
   };
 
   const handlePhoneNumberChange = (event) => {
-    const inputPhoneNumber = event.target.value;
-    setPhoneNumber(inputPhoneNumber);
+    setPhoneNumber(event.target.value);
+    setPhoneNumberError(null);
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    setPasswordError(null);
   };
 
   const handleNameChange = (event) => {
     setName(event.target.value);
+    setNameError(null);
   };
 
   const isValidPhoneNumber = (phoneNumber) => {
@@ -93,18 +119,19 @@ const Register = () => {
             />
           </Card>
           <br />
-          {errorMessage && (
+          {backendError && (
             <div className="alert alert-danger" role="alert">
-              {errorMessage}
+              {backendError}
             </div>
           )}
+
           {successMessage && (
             <div className="alert alert-success" role="alert">
               {successMessage}
             </div>
           )}
           <br />
-          <h5 class="card-title">Register</h5>
+          <h5 className="card-title">Register</h5>
           <br />
 
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -119,10 +146,10 @@ const Register = () => {
                     required
                     value={email}
                     onChange={handleEmailChange}
-                    isInvalid={!!errorMessage}
+                    isInvalid={!!emailError}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter a valid email.
+                    {emailError}
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
@@ -138,10 +165,10 @@ const Register = () => {
                     required
                     value={name}
                     onChange={handleNameChange}
-                    isInvalid={!!errorMessage}
+                    isInvalid={!!nameError}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter your Name.
+                    {nameError}
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
@@ -157,10 +184,10 @@ const Register = () => {
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
                   required
-                  isInvalid={!!errorMessage}
+                  isInvalid={!!phoneNumberError}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please enter a valid phone number.
+                  {phoneNumberError}
                 </Form.Control.Feedback>
               </InputGroup>
             </Form.Group>
@@ -176,10 +203,10 @@ const Register = () => {
                     required
                     value={password}
                     onChange={handlePasswordChange}
-                    isInvalid={!!errorMessage}
+                    isInvalid={!!passwordError}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter a password.
+                    {passwordError}
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>

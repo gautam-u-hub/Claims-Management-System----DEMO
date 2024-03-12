@@ -81,7 +81,6 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false });
-    console.log(req);
     const resetPasswordUrl = `${req.protocol}://${"localhost:3000"}/password/reset/${resetToken}`;
 
     const message = `Your password reset token is : \n\n ${resetPasswordUrl} \n\n If not requested then ignore`;

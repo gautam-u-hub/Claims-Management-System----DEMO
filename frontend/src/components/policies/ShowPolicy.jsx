@@ -72,8 +72,11 @@ const ShowPolicy = () => {
       );
 
       setSuccessMessage("Policy deleted successfully");
+      setTimeout(() => {
+        setSuccessMessage(null);
+        setErrorMessage(null);
+      }, 1500);
       setErrorMessage(null);
-      alert("Policy Deleted");
       Navigate("/");
     } catch (error) {
       setErrorMessage(error.response.data.message);

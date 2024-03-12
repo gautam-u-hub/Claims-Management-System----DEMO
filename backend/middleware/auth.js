@@ -74,11 +74,11 @@ exports.checkUserClaimOwnership = catchAsyncErrors(async (req, res, next) => {
     next();
 
 })
-const validApiKeys = ['random'];
+const validApiValues = ['randomValue'];
 exports.apiKeyCheck = (req, res, next) => {
     const apiKey = req.headers['api-key'] || req.query.api_key;
 
-    if (!apiKey || !validApiKeys.includes(apiKey)) {
+    if (!apiKey || !validApiValues.includes(apiKey)) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 

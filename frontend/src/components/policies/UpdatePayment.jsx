@@ -23,6 +23,7 @@ const UpdatePayment = () => {
         setUser(data.user);
       } catch (error) {
         setErrorMessage(error.data.response.message);
+
       }
     };
 
@@ -45,11 +46,13 @@ const UpdatePayment = () => {
       e.stopPropagation();
     }
     setValidated(true);
+    
+    
 
     if (!lastPaymentDate) {
       setInpErrorMessage("Please select a valid date.");
       setTimeout(() => {
-        setErrorMessage(null);
+        setInpErrorMessage(null);
       }, 5000);
       return;
     }
@@ -103,7 +106,7 @@ const UpdatePayment = () => {
               id="lastPaymentDate"
               required
             />
-            <div style={{ color: "red" }}>Please select a valid date.</div>
+            <div style={{ color: "red" }}>{ inpErrorMessage }</div>
           </div>
           <div className="mb-3">
             <button type="submit" className="btn btn-success">
